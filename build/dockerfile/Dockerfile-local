@@ -1,5 +1,5 @@
 # base go image
-FROM golang:1.23.1-alpine as builder
+FROM golang:1.23.1-alpine AS builder
 
 RUN mkdir /app
 
@@ -10,6 +10,19 @@ WORKDIR /app/cmd/api
 RUN export GOPROXY=https://goproxy.io,direct && CGO_ENABLED=0 go build -o kenar-divar-api .
 
 RUN chmod +x /app/cmd/api/kenar-divar-api
+
+# base go image
+FROM golang:1.23.1-alpine AS migration
+
+RUN mkdir /app
+
+COPY . /app
+
+WORKDIR /app/cmd/migration
+
+RUN export GOPROXY=https://goproxy.io,direct && CGO_ENABLED=0 go build -o kenar-divar-migration .
+
+RUN chmod +x /app/cmd/migration/kenar-divar-migration
 
 # build a tiny docker image
 FROM alpine:latest

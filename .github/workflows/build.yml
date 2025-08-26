@@ -1,0 +1,57 @@
+name: Build and Deploy Docker Images
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Registry
+        run: docker login -u ${{ secrets.CI_REGISTRY_USER }} -p ${{ secrets.CI_REGISTRY_PASSWORD }} ${{ secrets.CI_REGISTRY }}
+
+      - name: Build and Push API
+        run: |
+          docker build -t ${{ secrets.CI_REGISTRY }}/ck-api:${{ github.sha }} -t ${{ secrets.CI_REGISTRY }}/ck-api -f ./build/dockerfile/Dockerfile-Production .
+          docker push ${{ secrets.CI_REGISTRY }}/ck-api:${{ github.sha }}
+
+      - name: Set Output Build Section
+        id: output-build
+        run: echo "Build complete."
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Copy Docker Compose file to server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          scp -o StrictHostKeyChecking=no build/docker_compose/docker-compose.production.yml ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/ubuntu/project
+
+      - name: SSH and run Docker Compose
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh -o StrictHostKeyChecking=no  ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "export API_IMG=${{ secrets.CI_REGISTRY }}/ck-api:${{ github.sha }} && export DB_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }} && export DB_NAME=${{ secrets.DB_NAME }} && export DB_USER=${{ secrets.DB_USER }} && export DB_PASSWORD=${{ secrets.DB_PASSWORD }} && docker login -u ${{ secrets.CI_REGISTRY_USER }} -p ${{ secrets.CI_REGISTRY_PASSWORD }} ${{ secrets.CI_REGISTRY }} && cd /home/ubuntu/project && docker compose -f docker-compose.production.yml up -d"
+
+      - name: Set Output Deploy Section
+        id: output-deploy
+        run: echo "Deploy complete."

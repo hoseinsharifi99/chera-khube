@@ -3,7 +3,7 @@ services:
   ap-api:
     image: ${API_IMG}
     restart: always
-    container_name: ap-api
+    container_name: ck-api
     ports:
       - "8000:8000"
     deploy:
