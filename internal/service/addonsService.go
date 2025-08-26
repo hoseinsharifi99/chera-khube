@@ -14,7 +14,7 @@ import (
 type AddonsService interface {
 	AddWidgetToPost(ctx *gin.Context) (*model.Adons, float64, error)
 	EditAllDescription(ctx *gin.Context, postToken string) (*model.Post, int, error)
-	CreateAddons(ctx *gin.Context, postToken, codes string) (*model.Post, int, error)
+	CreateAddons(ctx *gin.Context, postToken, codes string) (*model.Post, *model.Adons, int, error)
 	GetAllNewDesc(ctx *gin.Context, postToken string) (*model.Post, int, error)
 	AddWidget(postToken, accessToken string, wid map[string]string, addons model.Adons) error
 	DeleteWidget(postToken, accessToken string) error
@@ -119,19 +119,19 @@ func (s addonsService) EditAllDescription(ctx *gin.Context, postToken string) (*
 	return post, user.Balance, nil
 }
 
-func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string) (*model.Post, int, error) {
+func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string) (*model.Post, *model.Adons, int, error) {
 	user, err := s.userService.GetUserWithContext(ctx)
 	if err != nil {
-		return nil, 0, err
+		return nil, nil, 0, err
 	}
 
 	if user.Balance < 1 {
-		return nil, 0, errors.New("not enough balance")
+		return nil, nil, 0, errors.New("not enough balance")
 	}
 
 	post, _, balance, err := s.postService.Get(user)
 	if err != nil {
-		return nil, 0, err
+		return nil, nil, 0, err
 	}
 
 	addonsInfo := s.configRepo.GetByCodes(strings.Split(codes, ","))
@@ -143,7 +143,7 @@ func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string) (
 
 	newDescription, err := s.promptService.CreateNewDescription(ctx, post.Data, addonsDesc)
 	if err != nil {
-		return nil, 0, err
+		return nil, nil, 0, err
 	}
 
 	addons := &model.Adons{
@@ -158,10 +158,10 @@ func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string) (
 	balance = user.Balance - 1
 	err = s.userService.UpdateBalance(user, balance)
 	if err != nil {
-		return nil, 0, err
+		return nil, nil, 0, err
 	}
 
-	return post, balance, nil
+	return post, addons, balance, nil
 }
 
 func (s addonsService) GetAllNewDesc(ctx *gin.Context, postToken string) (*model.Post, int, error) {

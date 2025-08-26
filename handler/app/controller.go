@@ -11,6 +11,7 @@ type controller struct {
 	postController    bController.PostController
 	pricingController bController.PricingController
 	divarController   bController.DivarController
+	addonsController  bController.AddonsController
 }
 
 func (a *application) InitController(srv *service, repo *repository, logger *zap.Logger) *controller {
@@ -20,6 +21,7 @@ func (a *application) InitController(srv *service, repo *repository, logger *zap
 	ctrl.postController = bController.NewPostController(srv.postService, a.config, logger)
 	ctrl.pricingController = bController.NewPricingController(srv.pricingService, a.config, logger)
 	ctrl.divarController = bController.NewDivarController(srv.divarService, a.config, logger)
+	ctrl.addonsController = bController.NewAddonsController(srv.addonsService, a.config, logger)
 
 	return &ctrl
 }

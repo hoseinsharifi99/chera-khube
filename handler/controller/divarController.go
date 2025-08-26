@@ -67,25 +67,25 @@ func (c divarController) EditAllPost(ctx *gin.Context) {
 }
 
 func (c divarController) CreateAddons(ctx *gin.Context) {
-	postToken := ctx.Param("post-token")
-	codes := ctx.Param("codes")
+	//postToken := ctx.Param("post-token")
+	//codes := ctx.Param("codes")
 
-	if postToken == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "empty post token"})
-	}
+	//if postToken == "" {
+	//	ctx.JSON(http.StatusBadRequest, gin.H{"error": "empty post token"})
+	//}
+	//
+	//if codes == "" {
+	//	ctx.JSON(http.StatusBadRequest, gin.H{"error": "empty codes"})
+	//}
+	//
+	//post, balance, err := c.divarService.CreateAddons(ctx, postToken, codes)
+	//if err != nil {
+	//	ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	//	ctx.Abort()
+	//	return
+	//}
 
-	if codes == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "empty codes"})
-	}
-
-	post, balance, err := c.divarService.CreateAddons(ctx, postToken, codes)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		ctx.Abort()
-		return
-	}
-
-	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "post": post, "balance": balance})
+	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "post": "post", "balance": "balance"})
 }
 
 func (c divarController) GetAllDescription(ctx *gin.Context) {
