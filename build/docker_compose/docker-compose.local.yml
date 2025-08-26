@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: ap_db
+    environment:
+      POSTGRES_USER: hosein
+      POSTGRES_PASSWORD: hosein121
+      POSTGRES_DB: chera-khube
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - kd_network
+
+volumes:
+  postgres_data:
+
+networks:
+  kd_network:
+    external: false

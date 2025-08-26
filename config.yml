@@ -1,0 +1,132 @@
+system:
+  develop_mode: false
+  log_path: ./logs
+  shutdown_timeout: 60
+
+database:
+  host: ap_db
+  port: 5432
+  username: hosein
+  password: hosein121
+  db_name: agahi_plus_db
+  max_idle_connection: 5
+  max_open_connection: 5
+  max_life_time: 60
+
+http:
+  host: 0.0.0.0
+  port: 8000
+
+divar:
+  client_id: solar-lead-lord
+  client_secret: 74ce4f7c0d6e8ec99bc9cab42331a0fe97052a112cadec9a770a5c6c99c8acb193ec7085c2094381ee1933a335a648ba02218699f11edb666cde82869b9c15e0
+  api_key: eyJhbGciOiJSUzI1NiIsImtpZCI6InByaXZhdGVfa2V5XzIiLCJ0eXAiOiJKV1QifQ.eyJhcHBfc2x1ZyI6ImFnYWhpLXBsdXMiLCJhdWQiOiJzZXJ2aWNlcHJvdmlkZXJzIiwiZXhwIjoxNzYxOTA1NjI3LCJqdGkiOiI2ODMzMmU3ZC01N2Y2LTExZjAtYjFiMi1mMmFkNDljYTkyYTAiLCJpYXQiOjE3NTE1Mzc2MjcsImlzcyI6ImRpdmFyIiwic3ViIjoiYXBpa2V5In0.kqf_qa_rQdf66u3d4pUsAlxH4yg_zir3CvamzjD6XT110QBqLds1B69bx8zk7Bx9hD8wsl46L2KElWmZloqS7ifIXeV7bKE_kN90RkQdwWWpibllFNnPB8-BZNfesHGPPdVWMarAU-Fn7cTyRGEcCIshaydnvNOnNs7_b9-HcMAH_Pcut5JczwbrySkG3IlGg3rcoKiQGN_6XAO73hRPzwsRuCLfl70DFkhD3rhr3XEGo8p9eEEUaY-fEHlN65AT21Yfjl-n_m2mGonKxeBRWEiJcMV3QYJO7ucnANIBR2yZz8iybTtHzDlZMHpXFqJ_wQOQNEDFDYlixSj67ZFlTg
+  redirect_uri: https://api.agahi-plus.ir/v1/user/oauth
+  add_ons: https://open-api.divar.ir/v2/open-platform/addons/post/{{post_token}}
+  delete_widget: https://open-api.divar.ir/v1/open-platform/add-ons/post/{{post_token}}
+  image: 368c02f2-340b-4602-83a5-efc2b3d2407b.jpg
+  get_post: https://open-api.divar.ir/v1/open-platform/finder/post/{{token}}
+  edit_post: https://open-api.divar.ir/v1/open-platform/post/{{token}}
+  get_posts: https://open-api.divar.ir/v1/open-platform/finder/user-posts
+
+  oauth:
+    base_url: https://oauth.divar.ir/oauth2/auth?response_type=%s&client_id=%s&redirect_uri=%s&scope=%s&state=%s
+    response_type: code
+
+  oauth_token:
+    base_url: https://oauth.divar.ir/oauth2/token
+    grant_type: authorization_code
+
+  oauth_phone_number:
+    base_url: https://open-api.divar.ir/v1/open-platform/users
+
+app:
+  salt: _E[*.61P.wA;-M>sS>Gb?@ZVd&>zp"C=A=R=p+.=K0d7CQ1R\WX;froI?wY![io`7Hk`<p=:xlK{nA<T[22H,ziR0Nv-BqweuMca+cZ1gR&D<J[6_s<,ko[Yh!aooK~C
+  inquiry_cost: 150000
+
+  front_end_login_redirect: https://agahi-plus.ir/posts?pn=%s&t=%s&tt=%s&pt=%s
+  front_end_purchase_redirect: https://agahi-plus.ir/payment?status=%d&ref_id=%s&service=%s
+  front_end_access_denied_redirect: https://agahi-plus.ir/request?state=%s&service=%s
+  llm_api_key: aa-JDpuqsYctmaNiypjpigyO1x45xn1EgfXB8hHO73T0QyGg5Zw
+  llm_url: https://api.avalapis.ir/v1
+  profile_front_end_login_redirect: https://agahi-plus.ir/link?pn=%s&t=%s&tt=%s&pt=%s
+  agahi_front_end_login_redirect: https://agahi-plus.ir/posts/all?pn=%s&t=%s&tt=%s&pt=%s
+  profile_front_end_entry_redirect: https://agahi-plus.ir/entry
+  agahi_front_end_entry_redirect: https://agahi-plus.ir/entry/agahi
+  
+  hash:
+    salt: cvbn68eqeqwy
+    alphabet: abcdefghijklmnopqrstuvwxyz123458760
+    min_length: 6
+
+  test: false
+  
+  kenar_redirect_base_url: https://agahi-plus.ir/kenar?code=%s&ref=%s
+  kenar_divar_button: https://api.agahi-plus.ir/v1/profile/kenar/
+
+jwt:
+  secret: ;3A4caF_kc7|nB]RZvYk7<'`2(}#sEEi?upq&miG&RdxSHF3P)l1|f6$(BQK"[lr1219EbkZ{RRo|ci3<UW~M9p!L"[4|Q7cRr_$
+  expire_hour: 48
+
+zarinpal:
+  merchant_id: 670ce05f-f854-4c72-8ad9-5a565c711217
+  callback_url: https://api.agahi-plus.ir/v1/payment/verify?user_id=%d&amount=%d&id=%d&service=%s
+  sandbox: false
+
+
+car:
+  client_id: link-plus
+  client_secret: 637f54cff23f4c85de49ceeefcc52a8b96db6a8b55abeb02da160249c2017d7fa039459028aac46ca575e1fd8641a2f07f489644ca92334b856b8554552a706f
+  api_key: eyJhbGciOiJSUzI1NiIsImtpZCI6InByaXZhdGVfa2V5XzIiLCJ0eXAiOiJKV1QifQ.eyJhcHBfc2x1ZyI6ImxpbmstcGx1cyIsImF1ZCI6InNlcnZpY2Vwcm92aWRlcnMiLCJleHAiOjE3NTYyOTkxMzMsImp0aSI6ImM1ZWJhNzU5LTI0ZjgtMTFmMC05ZjE0LTQ2N2E2NDk4ZGYwOSIsImlhdCI6MTc0NTkzMTEzMywiaXNzIjoiZGl2YXIiLCJzdWIiOiJhcGlrZXkifQ.jH9Kwl1aGwC44DOCqabWE_ydBAqeqkAjD4aDL4sUOP_wt2ib9cvHfSbaVbXHb3oaaXgiTS_sXypUVDm10Hoa24sDY_A5d5GAh2TA2gd8zze6XTrtvOh4RxoogyESI5DBsmBy1xIwLCW9oz9yRHm74wbiKEi6CUCcU_SsDvegUTuwq2neCbVhs2rLW-fy2sR4Xg8XNPUQweeEPDu_bd_9C57AbIWfJzASLdGhAeWuyob53kdaJaM7V7Bof3ElAepg4K1vPkag3z2zVRM7sONI-yj9eJR_XCckFgXfl_VEa1UQOo596mTty5fixm9V9ecRylAvFVqSnT1CVOyAdjHQwQ
+  redirect_uri: https://api.agahi-plus.ir/v1/user/oauth/profile
+  add_ons: https://open-api.divar.ir/v2/open-platform/addons/user/{phone}
+  delete_widget: https://open-api.divar.ir/v1/open-platform/addons/user/{id}
+  delete_widget_by_post: https://open-api.divar.ir/v2/open-platform/addons/post/{token}
+  image: 368c02f2-340b-4602-83a5-efc2b3d2407b.jpg
+  get_post: https://open-api.divar.ir/v1/open-platform/finder/post/{{token}}
+  edit_post: https://open-api.divar.ir/v1/open-platform/post/{{token}}
+
+  oauth:
+    base_url: https://oauth.divar.ir/oauth2/auth?response_type=%s&client_id=%s&redirect_uri=%s&scope=%s&state=%s
+    response_type: code
+
+  oauth_token:
+    base_url: https://oauth.divar.ir/oauth2/token
+    grant_type: authorization_code
+
+  oauth_phone_number:
+    base_url: https://open-api.divar.ir/v1/open-platform/users
+
+agahi:
+  client_id: agahi-plus-general
+  client_secret: fc893b8846daaaf8f51ee8e988ab84d124d354a73808d033ebe20569ff05b80610736ed397cd676fbe387cb2c179e4002df665a6b082d35e799a304dfafd2875
+  api_key: eyJhbGciOiJSUzI1NiIsImtpZCI6InByaXZhdGVfa2V5XzIiLCJ0eXAiOiJKV1QifQ.eyJhcHBfc2x1ZyI6ImFnYWhpLXBsdXMtZ2VuZXJhbCIsImF1ZCI6InNlcnZpY2Vwcm92aWRlcnMiLCJleHAiOjE3NTY3MTYxMzcsImp0aSI6ImFmNDc5NjExLTI4YzMtMTFmMC1iZTMyLTRhNTRiMjcxYTdmNyIsImlhdCI6MTc0NjM0ODEzNywiaXNzIjoiZGl2YXIiLCJzdWIiOiJhcGlrZXkifQ.kxgCd8_cAYXCzKoCdMuAngE3ywO1XKIrSD-8lfQJYF8aYxbrVYoSUl1eSZUiGmxqtWqrVZFlGUby9E4dTMf7daq2Ilxpe8cd9JgiSur8YWzgspZvZpjrIuDcqArjUUFz-vkKN6BXgDA4GD63NN54-wanOaeyM_OqVmtiutU7wqw7UsqacpbWNwGq09B-pXwTBErJoLKqHJKbSJOKThU7aVCK_y1gIip0FblrhLDNdq0iFRvcow1SXoT7yS0kg1GwT8h3m07fmSS2UrKd6ze7PXJ4QC41EFzq9f5GDwaM3qPNjUJeqQT4msKgcZ-5-mrloNUM6oAhp1Q9YPfPDp2qFg
+  redirect_uri: https://api.agahi-plus.ir/v1/user/oauth/agahi
+  get_post: https://open-api.divar.ir/v1/open-platform/finder/post/{{token}}
+  edit_post: https://open-api.divar.ir/v1/open-platform/post/{{token}}
+
+  oauth:
+    base_url: https://oauth.divar.ir/oauth2/auth?response_type=%s&client_id=%s&redirect_uri=%s&scope=%s&state=%s
+    response_type: code
+
+  oauth_token:
+    base_url: https://oauth.divar.ir/oauth2/token
+    grant_type: authorization_code
+
+  oauth_phone_number:
+    base_url: https://open-api.divar.ir/v1/open-platform/users
+
+yektanet:
+  front_redirect_url: https://agahi-plus.ir/user/posts?access_token=%s&service=%s
+  apartment:
+    redirect_url: https://api.agahi-plus.ir/v1/user/ads/oauth/apartment
+    client_id: agahi-plus
+    response_type: code
+  link_plus:
+    redirect_url: https://api.agahi-plus.ir/v1/user/ads/oauth/profile
+    client_id: link-plus
+    response_type: code
+  agahi_plus:
+    redirect_url: https://api.agahi-plus.ir/v1/user/ads/oauth/agahi
+    client_id: agahi-plus-general
+    response_type: code

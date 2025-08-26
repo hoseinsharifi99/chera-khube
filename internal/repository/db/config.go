@@ -1,0 +1,57 @@
+package db
+
+import (
+	"chera_khube/internal/model"
+	"chera_khube/internal/repository"
+	"go.uber.org/zap"
+	"gorm.io/gorm"
+)
+
+func NewConfigDb(db *gorm.DB, logger *zap.Logger) repository.ConfigRepository {
+	return &configDb{
+		db:     db,
+		logger: logger,
+	}
+}
+
+type configDb struct {
+	db     *gorm.DB
+	logger *zap.Logger
+}
+
+func (r configDb) List() []model.Config {
+	var configs []model.Config
+	err := r.db.Find(&configs).Error
+	if err != nil {
+		r.logger.Error("failed to fetch configs", zap.Error(err))
+		return []model.Config{}
+	}
+	return configs
+}
+
+func (r configDb) ListAsMap() map[string]string {
+	var configs []model.Config
+	result := make(map[string]string)
+
+	err := r.db.Find(&configs).Error
+	if err != nil {
+		r.logger.Error("failed to fetch configs", zap.Error(err))
+		return result
+	}
+
+	for _, cfg := range configs {
+		result[cfg.Code] = cfg.Description
+	}
+
+	return result
+}
+
+func (r configDb) GetByCodes(codes []string) []model.Config {
+	var configs []model.Config
+	err := r.db.Where("code IN ?", codes).Find(&configs).Error
+	if err != nil {
+		r.logger.Error("failed to fetch configs by codes", zap.Error(err), zap.Strings("codes", codes))
+		return []model.Config{}
+	}
+	return configs
+}
