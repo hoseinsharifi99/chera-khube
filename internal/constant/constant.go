@@ -1,7 +1,7 @@
 package constant
 
 const (
-	DefaultEnvPath                 = "./../../config.yml"
+	DefaultEnvPath                 = "./../../config.local.yml"
 	ZarinpalApiEndPoint            = "https://api.zarinpal.com/pg/v4/payment/"
 	ZarinpalPaymentEndpoint        = "https://www.zarinpal.com/pg/StartPay/"
 	ZarinpalSandboxApiEndPoint     = "https://sandbox.zarinpal.com/pg/v4/payment/"

@@ -26,6 +26,7 @@ func main() {
 
 func migrate(db *gorm.DB) {
 	db.Debug().AutoMigrate(model.Post{})
+	db.Debug().AutoMigrate(model.Config{})
 	db.Debug().AutoMigrate(model.UserPayment{})
 	db.Debug().AutoMigrate(model.PricingLogic{})
 	db.Debug().AutoMigrate(model.Adons{})
