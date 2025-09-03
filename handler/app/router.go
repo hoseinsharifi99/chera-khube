@@ -35,6 +35,9 @@ func (a *application) InitRouter(ctrl *controller, logger *zap.Logger) *gin.Engi
 	divarR := router.NewDivarRouter(ctrl.divarController)
 	divarR.HandleRoutes(r, a.config)
 
+	adonsR := router.NewAddonsRouter(ctrl.addonsController)
+	adonsR.HandleRoutes(r, a.config)
+
 	return r
 }
 
