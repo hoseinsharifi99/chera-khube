@@ -12,6 +12,8 @@ type AddonsController interface {
 	CreateAddons(ctx *gin.Context)
 	AddAddons(ctx *gin.Context)
 	GetConfig(ctx *gin.Context)
+	GetAddons(ctx *gin.Context)
+	DeleteWidget(ctx *gin.Context)
 }
 type addonsController struct {
 	addonsService service.AddonsService
@@ -29,6 +31,28 @@ func (a addonsController) CreateAddons(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "post": post, "addons:": addons, "balance": balance})
+}
+
+func (a addonsController) GetAddons(ctx *gin.Context) {
+	addons, balance, err := a.addonsService.GetAddons(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.Abort()
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "addons:": addons, "balance": balance})
+}
+
+func (a addonsController) DeleteWidget(ctx *gin.Context) {
+	err := a.addonsService.DeleteWidget(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.Abort()
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
 
 func (a addonsController) AddAddons(ctx *gin.Context) {
