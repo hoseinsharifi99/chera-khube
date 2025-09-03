@@ -382,7 +382,7 @@ func (u userService) AdsOAuth(ctx *gin.Context, service string) (string, error) 
 	clientID := ""
 	clientSecret := ""
 	switch service {
-	case constant.AgahiPlusServiceName:
+	case constant.Apartment:
 		redirectUrl = u.config.Yektanet.AgahiPlus.RedirectUrl
 		clientID = u.config.Yektanet.AgahiPlus.ClientID
 		clientSecret = u.config.AgahiPlus.ClientSecret
@@ -412,7 +412,7 @@ func (u userService) AdsOAuth(ctx *gin.Context, service string) (string, error) 
 func (u userService) GetPosts(accessToken string, serviceName string) (*response.GetPostsResponse, error) {
 	apiKey := ""
 	switch serviceName {
-	case constant.AgahiPlusServiceName:
+	case constant.Apartment:
 		apiKey = u.config.AgahiPlus.ApiKey
 	case constant.LinkPlusServiceName:
 		apiKey = u.config.CarDivar.ApiKey
