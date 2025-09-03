@@ -18,6 +18,7 @@ type AddonsService interface {
 	GetAllNewDesc(ctx *gin.Context, postToken string) (*model.Post, int, error)
 	AddWidget(postToken, accessToken string, wid map[string]string, addons model.Adons) error
 	DeleteWidget(postToken, accessToken string) error
+	GetConfig() []model.Config
 }
 
 type addonsService struct {
@@ -117,6 +118,10 @@ func (s addonsService) EditAllDescription(ctx *gin.Context, postToken string) (*
 	}
 
 	return post, user.Balance, nil
+}
+
+func (s addonsService) GetConfig() []model.Config {
+	return s.configRepo.List()
 }
 
 func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string) (*model.Post, *model.Adons, int, error) {

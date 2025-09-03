@@ -11,6 +11,7 @@ import (
 type AddonsController interface {
 	CreateAddons(ctx *gin.Context)
 	AddAddons(ctx *gin.Context)
+	GetConfig(ctx *gin.Context)
 }
 type addonsController struct {
 	addonsService service.AddonsService
@@ -39,6 +40,11 @@ func (a addonsController) AddAddons(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "addons": addons, "balance": balance})
+}
+
+func (a addonsController) GetConfig(ctx *gin.Context) {
+	configs := a.addonsService.GetConfig()
+	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "configs": configs})
 }
 
 func NewAddonsController(
