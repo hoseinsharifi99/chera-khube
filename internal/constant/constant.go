@@ -11,5 +11,5 @@ const (
 const (
 	ApartmentServiceName = "apartment"
 	LinkPlusServiceName  = "profile"
-	AgahiPlusServiceName = "agahi"
+	Apartment            = "apartment"
 )

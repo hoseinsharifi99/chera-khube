@@ -99,8 +99,8 @@ func (s oAuthService) LoginWithDivar(ctx *gin.Context, service string) string {
 	state := postToken
 
 	var url string
-	if service == constant.AgahiPlusServiceName {
-		url = fmt.Sprintf(s.Config.AgahiPlus.OAuth.BaseUrl, s.Config.AgahiPlus.OAuth.ResponseType, s.Config.AgahiPlus.ClientID, s.Config.AgahiPlus.RedirectUrl, "USER_PHONE POST_EDIT."+postToken, state)
+	if service == constant.Apartment {
+		url = fmt.Sprintf(s.Config.Divar.OAuth.BaseUrl, s.Config.Divar.OAuth.ResponseType, s.Config.Divar.ClientID, s.Config.Divar.RedirectUrl, "USER_PHONE POST_ADDON_CREATE."+postToken, state)
 	} else if service == constant.LinkPlusServiceName {
 		url = fmt.Sprintf(s.Config.CarDivar.OAuth.BaseUrl, s.Config.CarDivar.OAuth.ResponseType, s.Config.CarDivar.ClientID, s.Config.CarDivar.RedirectUrl, "USER_PHONE offline_access USER_ADDON_CREATE", state)
 	} else {
@@ -112,7 +112,7 @@ func (s oAuthService) LoginWithDivar(ctx *gin.Context, service string) string {
 
 func (s oAuthService) AdsEntry(ctx *gin.Context, service string) string {
 	var url string
-	if service == constant.AgahiPlusServiceName {
+	if service == constant.Apartment {
 		url = fmt.Sprintf(s.Config.Divar.OAuth.BaseUrl, s.Config.Yektanet.AgahiPlus.ResponseType, s.Config.Yektanet.AgahiPlus.ClientID, s.Config.Yektanet.AgahiPlus.RedirectUrl, "USER_POSTS_GET", uuid.New().String()+"__"+service)
 	} else if service == constant.LinkPlusServiceName {
 		url = fmt.Sprintf(s.Config.Divar.OAuth.BaseUrl, s.Config.Yektanet.LinkPlus.ResponseType, s.Config.Yektanet.LinkPlus.ClientID, s.Config.Yektanet.LinkPlus.RedirectUrl, "USER_POSTS_GET", uuid.New().String()+"__"+service)
