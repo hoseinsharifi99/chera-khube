@@ -69,7 +69,7 @@ func (u userController) OAuth(ctx *gin.Context) {
 		return
 	}
 
-	redirectUrl := fmt.Sprintf(u.config.App.FrontEndLoginRedirect, user.PhoneNumber, user.JwtToken, user.JwtExpireAt.Format("2006-01-02 15:04:05"), user.PostToken)
+	redirectUrl := fmt.Sprintf(u.config.App.FrontEndLoginRedirect, srv, user.PhoneNumber, user.JwtToken, user.JwtExpireAt.Format("2006-01-02 15:04:05"), user.PostToken)
 	ctx.SetCookie("token", user.JwtToken, int(user.JwtExpireAt.Sub(time.Now()).Seconds()), "/", "", false, true)
 	ctx.Redirect(http.StatusTemporaryRedirect, redirectUrl)
 }

@@ -37,12 +37,12 @@ divar:
       base_url: https://oauth.divar.ir/oauth2/auth?response_type=%s&client_id=%s&redirect_uri=%s&scope=%s&state=%s
       response_type: code
 
-      oauth_token:
-        base_url: https://oauth.divar.ir/oauth2/token
-        grant_type: authorization_code
+    oauth_token:
+      base_url: https://oauth.divar.ir/oauth2/token
+      grant_type: authorization_code
 
-      oauth_phone_number:
-        base_url: https://open-api.divar.ir/v1/open-platform/users
+    oauth_phone_number:
+      base_url: https://open-api.divar.ir/v1/open-platform/users
 
   car:
     client_id: divarinow-general
@@ -56,12 +56,12 @@ divar:
       base_url: https://oauth.divar.ir/oauth2/auth?response_type=%s&client_id=%s&redirect_uri=%s&scope=%s&state=%s
       response_type: code
 
-      oauth_token:
-        base_url: https://oauth.divar.ir/oauth2/token
-        grant_type: authorization_code
+    oauth_token:
+      base_url: https://oauth.divar.ir/oauth2/token
+      grant_type: authorization_code
 
-      oauth_phone_number:
-        base_url: https://open-api.divar.ir/v1/open-platform/users
+    oauth_phone_number:
+      base_url: https://open-api.divar.ir/v1/open-platform/users
 
 
 app:
@@ -75,7 +75,7 @@ app:
     owner_national_id: 002
     wallet_identifier: 111
 
-  front_end_login_redirect: https://divarinow.ir?pn=%s&t=%s&tt=%s
+  front_end_login_redirect: https://divarinow.ir/%s?pn=%s&t=%s&tt=%s
   front_end_purchase_redirect: https://divarinow.ir/payment?status=%d&ref_id=%s
   front_end_access_denied_redirect: https://divarinow.ir/request?state=%s&service=%s
   front_end_entry_redirect: https://divarinow.ir/entry

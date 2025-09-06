@@ -75,7 +75,7 @@ app:
     owner_national_id: 002
     wallet_identifier: 111
 
-  front_end_login_redirect: https://divarinow.ir?pn=%s&t=%s&tt=%s
+  front_end_login_redirect: https://divarinow.ir/%s?pn=%s&t=%s&tt=%s
   front_end_purchase_redirect: https://divarinow.ir/payment?status=%d&ref_id=%s
   front_end_access_denied_redirect: https://divarinow.ir/request?state=%s&service=%s
   front_end_entry_redirect: https://divarinow.ir/entry
