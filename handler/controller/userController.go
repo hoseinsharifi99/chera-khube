@@ -64,7 +64,7 @@ func (u userController) OAuth(ctx *gin.Context) {
 	if err != nil {
 		log.Println(err.Error())
 		//redirect to access denied page:
-		redirectUrl := fmt.Sprintf(u.config.App.FrontEndAccessDeniedRedirect, postToken, "")
+		redirectUrl := fmt.Sprintf(u.config.App.FrontEndAccessDeniedRedirect, postToken, srv)
 		ctx.Redirect(http.StatusTemporaryRedirect, redirectUrl)
 		return
 	}

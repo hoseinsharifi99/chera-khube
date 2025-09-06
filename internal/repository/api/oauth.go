@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"go.uber.org/zap"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 )
@@ -32,6 +33,12 @@ func (o *oAuthRepository) GetToken(d dto.OAuthToken) (*dto.AccessTokenResponse, 
 
 	client := &http.Client{}
 	req, err := http.NewRequest(method, apiUrl, bytes.NewBufferString(data.Encode()))
+	log.Println("url:", d.BaseUrl)
+	log.Println("code:", d.Code)
+	log.Println("client_id:", d.ClientID)
+	log.Println("client_secret:", d.ClientSecret)
+	log.Println("grant_type:", d.GrantType)
+	log.Println("redirect_uri:", d.RedirectUri)
 
 	if err != nil {
 		o.logger.Warn("Failed to create request", zap.Error(err))
