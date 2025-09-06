@@ -42,7 +42,7 @@ func (u userController) LoginWithDivar(ctx *gin.Context) {
 	postToken := ctx.Query("post_token")
 	returnUrl := ctx.Query("return_url")
 
-	redirectUrl := fmt.Sprintf(u.config.App.FrontEndEntryRedirect+"/"+serviceName+"?post_token=%s&return_url=%s", postToken, returnUrl, serviceName)
+	redirectUrl := fmt.Sprintf(u.config.App.FrontEndEntryRedirect+"/"+serviceName+"?post_token=%s&return_url=%s&service=%s", postToken, returnUrl, serviceName)
 	fmt.Println("redirect to:", returnUrl)
 	ctx.Redirect(http.StatusTemporaryRedirect, redirectUrl)
 	return
