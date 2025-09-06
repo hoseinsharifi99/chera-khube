@@ -14,11 +14,10 @@ import (
 type AddonsService interface {
 	AddWidgetToPost(ctx *gin.Context, serviceName string) (*model.Adons, float64, error)
 	CreateAddons(ctx *gin.Context, postToken, codes string, serviceName string) (*model.Post, *model.Adons, int, error)
-	GetAllNewDesc(ctx *gin.Context, postToken string) (*model.Post, int, error)
 	AddWidget(postToken, accessToken string, wid map[string]string, addons model.Adons, serviceName string) error
 	DeleteWidget(ctx *gin.Context, serviceName string) error
 	GetConfig() []model.Config
-	GetAddons(ctx *gin.Context) (*model.Adons, int, error)
+	GetAddons(ctx *gin.Context, serviceName string) (*model.Adons, int, error)
 }
 
 type addonsService struct {
@@ -63,7 +62,7 @@ func (s addonsService) AddWidgetToPost(ctx *gin.Context, serviceName string) (*m
 		return nil, 0, err
 	}
 
-	post, ad, _, err := s.postService.GetPostByUser(ctx)
+	post, ad, _, err := s.postService.GetPostByUser(ctx, serviceName)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -137,7 +136,7 @@ func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string, s
 		return nil, nil, 0, errors.New("not enough balance")
 	}
 
-	post, _, balance, err := s.postService.Get(user)
+	post, _, balance, err := s.postService.Get(user, serviceName)
 	if err != nil {
 		return nil, nil, 0, err
 	}
@@ -175,37 +174,6 @@ func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string, s
 	}
 
 	return post, addons, balance, nil
-}
-
-func (s addonsService) GetAllNewDesc(ctx *gin.Context, postToken string) (*model.Post, int, error) {
-	user, err := s.userService.GetUserWithContext(ctx)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	if user.Balance < 1 {
-		return nil, 0, errors.New("not enough balance")
-	}
-
-	post, _, _, err := s.postService.Get(user)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	_, err = s.promptService.CreateAgahiNewDescription(ctx, post.Data)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	err = s.postService.UpdatePost(post)
-
-	balance := user.Balance - 1
-	err = s.userService.UpdateBalance(user, balance)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	return post, balance, nil
 }
 
 func (s addonsService) AddWidget(postToken, accessToken string, wid map[string]string, addons model.Adons, serviceName string) error {
@@ -263,8 +231,8 @@ func (s addonsService) createWidgets(wd map[string]string, addons model.Adons) *
 	return &dWidget
 }
 
-func (s addonsService) GetAddons(ctx *gin.Context) (*model.Adons, int, error) {
-	_, addons, balance, err := s.postService.GetPostByUser(ctx)
+func (s addonsService) GetAddons(ctx *gin.Context, serviceName string) (*model.Adons, int, error) {
+	_, addons, balance, err := s.postService.GetPostByUser(ctx, serviceName)
 	if err != nil {
 		return nil, 0, err
 	}

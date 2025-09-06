@@ -18,5 +18,4 @@ func NewDivarRouter(divarController controller.DivarController) Router {
 func (r divarRouter) HandleRoutes(router *gin.Engine, config *helper.ServiceConfig) {
 	user := router.Group("v1").Group("divar")
 	user.GET("description/:post-token", middlewares.Jwt(config), r.divarController.CreateAddons)
-	user.GET("description/all/:post-token", middlewares.Jwt(config), r.divarController.GetAllDescription)
 }

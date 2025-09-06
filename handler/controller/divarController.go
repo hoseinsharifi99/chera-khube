@@ -10,7 +10,6 @@ import (
 
 type DivarController interface {
 	CreateAddons(ctx *gin.Context)
-	GetAllDescription(ctx *gin.Context)
 }
 type divarController struct {
 	divarService service.AddonsService
@@ -68,21 +67,4 @@ func (c divarController) CreateAddons(ctx *gin.Context) {
 	//}
 
 	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "post": "post", "balance": "balance"})
-}
-
-func (c divarController) GetAllDescription(ctx *gin.Context) {
-	postToken := ctx.Param("post-token")
-
-	if postToken == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "empty post token"})
-	}
-
-	post, balance, err := c.divarService.GetAllNewDesc(ctx, postToken)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		ctx.Abort()
-		return
-	}
-
-	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "post": post, "balance": balance})
 }

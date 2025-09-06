@@ -10,7 +10,6 @@ import (
 
 type PostController interface {
 	Get(ctx *gin.Context)
-	GetAll(ctx *gin.Context)
 }
 type postController struct {
 	postService service.PostService
@@ -19,26 +18,16 @@ type postController struct {
 }
 
 func (c postController) Get(ctx *gin.Context) {
-	post, addons, balance, err := c.postService.GetPostByUser(ctx)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		ctx.Abort()
-		return
-	}
+	//post, addons, balance, err := c.postService.GetPostByUser(ctx)
+	//if err != nil {
+	//	ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	//	ctx.Abort()
+	//	return
+	//}
 
-	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "postTitle": post.Title, "Addons": addons, "balance": balance})
+	ctx.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
 
-func (c postController) GetAll(ctx *gin.Context) {
-	post, balance, err := c.postService.GetAllPostByUser(ctx)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		ctx.Abort()
-		return
-	}
-
-	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "post": post, "balance": balance})
-}
 func NewPostController(
 	postService service.PostService,
 	config *helper.ServiceConfig,

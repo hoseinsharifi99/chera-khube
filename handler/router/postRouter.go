@@ -18,5 +18,4 @@ func NewPostRouter(postController controller.PostController) Router {
 func (r postRouter) HandleRoutes(router *gin.Engine, config *helper.ServiceConfig) {
 	post := router.Group("v1").Group("post")
 	post.GET("", middlewares.Jwt(config), r.postController.Get)
-	post.GET("all", middlewares.Jwt(config), r.postController.GetAll)
 }

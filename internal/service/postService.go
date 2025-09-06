@@ -10,10 +10,8 @@ import (
 )
 
 type PostService interface {
-	Get(user *model.User) (*model.Post, *model.Adons, int, error)
-	GetByAll(user *model.User) (*model.Post, int, error)
-	GetPostByUser(ctx *gin.Context) (*model.Post, *model.Adons, int, error)
-	GetAllPostByUser(ctx *gin.Context) (*model.Post, int, error)
+	Get(user *model.User, serviceName string) (*model.Post, *model.Adons, int, error)
+	GetPostByUser(ctx *gin.Context, serviceName string) (*model.Post, *model.Adons, int, error)
 	UpdatePost(post *model.Post) error
 }
 
@@ -44,7 +42,7 @@ func NewPostService(
 	}
 }
 
-func (s postService) Get(user *model.User) (*model.Post, *model.Adons, int, error) {
+func (s postService) Get(user *model.User, serviceName string) (*model.Post, *model.Adons, int, error) {
 	if user.PostToken == "" {
 		return nil, nil, 0, errors.New("token required")
 	}
@@ -55,7 +53,7 @@ func (s postService) Get(user *model.User) (*model.Post, *model.Adons, int, erro
 	}
 
 	if post == nil {
-		post, err = s.postApiRepo.Get(user.PostToken)
+		post, err = s.postApiRepo.Get(user.PostToken, serviceName)
 		if err != nil {
 			return nil, nil, 0, err
 		}
@@ -77,50 +75,13 @@ func (s postService) Get(user *model.User) (*model.Post, *model.Adons, int, erro
 	return post, adons, user.Balance, nil
 }
 
-func (s postService) GetByAll(user *model.User) (*model.Post, int, error) {
-	if user.PostToken == "" {
-		return nil, 0, errors.New("token required")
-	}
-
-	post, err := s.postDbRepo.Get(user.PostToken)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	if post != nil {
-		return post, user.Balance, nil
-	}
-
-	post, err = s.postApiRepo.GetByAll(user.PostToken)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	post.UserID = user.ID
-	post, err = s.postDbRepo.Insert(post)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	return post, user.Balance, nil
-}
-
-func (s postService) GetPostByUser(ctx *gin.Context) (*model.Post, *model.Adons, int, error) {
+func (s postService) GetPostByUser(ctx *gin.Context, serviceName string) (*model.Post, *model.Adons, int, error) {
 	user, err := s.userService.GetUserWithContext(ctx)
 	if err != nil {
 		return nil, nil, 0, err
 	}
 
-	return s.Get(user)
-}
-
-func (s postService) GetAllPostByUser(ctx *gin.Context) (*model.Post, int, error) {
-	user, err := s.userService.GetUserWithContext(ctx)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	return s.GetByAll(user)
+	return s.Get(user, serviceName)
 }
 
 func (s postService) UpdatePost(post *model.Post) error {

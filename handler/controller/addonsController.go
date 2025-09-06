@@ -36,7 +36,8 @@ func (a addonsController) CreateAddons(ctx *gin.Context) {
 }
 
 func (a addonsController) GetAddons(ctx *gin.Context) {
-	addons, balance, err := a.addonsService.GetAddons(ctx)
+	srv := ctx.Param("service")
+	addons, balance, err := a.addonsService.GetAddons(ctx, srv)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		ctx.Abort()
