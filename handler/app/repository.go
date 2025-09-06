@@ -39,6 +39,7 @@ func (a *application) InitRepository(logger *zap.Logger) *repository {
 	repo.appLogRepository = db.NewAppLog(a.db, logger)
 	repo.addonsDbRepository = db.NewAdonsDb(a.db, logger)
 	repo.configDbRepository = db.NewConfigDb(a.db, logger)
+	repo.postApiRepository = api.NewPostApi(a.config, logger)
 
 	return &repo
 }

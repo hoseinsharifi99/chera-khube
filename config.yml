@@ -1,10 +1,10 @@
 system:
-  develop_mode: true
+  develop_mode: false
   log_path: ./logs/log
   shutdown_timeout: 60
 
 database:
-  host: localhost
+  host: ck_db
   port: 5432
   username: omid
   password: omid121
@@ -26,29 +26,29 @@ divar:
     addons: https://open-api.divar.ir/v2/open-platform/addons/post/{{post_token}}
 
   apartment:
-    client_id: divarinow-general
-    client_secret: fc893b8846daaaf8f51ee8e988ab84d124d354a73808d033ebe20569ff05b80610736ed397cd676fbe387cb2c179e4002df665a6b082d35e799a304dfafd2875
-    api_key: eyJhbGciOiJSUzI1NiIsImtpZCI6InByaXZhdGVfa2V5XzIiLCJ0eXAiOiJKV1QifQ.eyJhcHBfc2x1ZyI6ImFnYWhpLXBsdXMtZ2VuZXJhbCIsImF1ZCI6InNlcnZpY2Vwcm92aWRlcnMiLCJleHAiOjE3NTY3MTYxMzcsImp0aSI6ImFmNDc5NjExLTI4YzMtMTFmMC1iZTMyLTRhNTRiMjcxYTdmNyIsImlhdCI6MTc0NjM0ODEzNywiaXNzIjoiZGl2YXIiLCJzdWIiOiJhcGlrZXkifQ.kxgCd8_cAYXCzKoCdMuAngE3ywO1XKIrSD-8lfQJYF8aYxbrVYoSUl1eSZUiGmxqtWqrVZFlGUby9E4dTMf7daq2Ilxpe8cd9JgiSur8YWzgspZvZpjrIuDcqArjUUFz-vkKN6BXgDA4GD63NN54-wanOaeyM_OqVmtiutU7wqw7UsqacpbWNwGq09B-pXwTBErJoLKqHJKbSJOKThU7aVCK_y1gIip0FblrhLDNdq0iFRvcow1SXoT7yS0kg1GwT8h3m07fmSS2UrKd6ze7PXJ4QC41EFzq9f5GDwaM3qPNjUJeqQT4msKgcZ-5-mrloNUM6oAhp1Q9YPfPDp2qFg
-    redirect_uri: https://api.divarinow.ir/v1/user/oauth
+    client_id: solar-lead-lord
+    client_secret: 52f0e652ba2d5d9437d666ebd922eb8573a3758bcab7a9a405b5376213a0bd63a927330d9af3e65c3fb3c22422bda16a3d81b211561e842be571b620984c38a7
+    api_key: eyJhbGciOiJSUzI1NiIsImtpZCI6InByaXZhdGVfa2V5XzIiLCJ0eXAiOiJKV1QifQ.eyJhcHBfc2x1ZyI6InNvbGFyLWxlYWQtbG9yZCIsImF1ZCI6InNlcnZpY2Vwcm92aWRlcnMiLCJleHAiOjE3NjIzNDIzNTMsImp0aSI6IjJlNWIwNTlhLThiMTUtMTFmMC1hZWRhLTRhNmU5Y2EyZDk3OSIsImlhdCI6MTc1NzE1ODM1MywiaXNzIjoiZGl2YXIiLCJzdWIiOiJhcGlrZXkifQ.Lkte6hMD2BmotZ2HHBaoPmPsOkBBXUamxn6POfbapsHY_KBAGUH9Aj9d9Qf2qv3rzyIWZb9UmWiEn8MgK4e80RlfG2k0hCf3sxotiQfZDFPm2Bol-ofVwKJC9iZNUQ_ooT3MI1XClpGRYZU_W4dJAQa0xfBb2Kxx9CS09pe2MNqpG-aDH6qiyyUZz5zJu1BwdfsOE3NfeKfmaF3m6GUAKyy_49QkX6C7SJJit0dLsxYm5IMsrOilWS-WFMhc2TvMgBKtqooi6p52sTzwIal4yHv2saYYq1iduR64SrDc4OZl8vlBEzPlOTT1iIPGe57YxePjeG6IKTUNUXMZtA3EnA
+    redirect_uri: https://api.divarinow.ir/v1/user/oauth/apartment
     image: 368c02f2-340b-4602-83a5-efc2b3d2407b.jpg
-    scopes: USER_PHONE POST_ADDON_CREATE.
+    scopes: USER_PHONE%20POST_ADDON_CREATE.
 
     oauth:
       base_url: https://oauth.divar.ir/oauth2/auth?response_type=%s&client_id=%s&redirect_uri=%s&scope=%s&state=%s
       response_type: code
 
-      oauth_token:
-        base_url: https://oauth.divar.ir/oauth2/token
-        grant_type: authorization_code
+    oauth_token:
+      base_url: https://oauth.divar.ir/oauth2/token
+      grant_type: authorization_code
 
-      oauth_phone_number:
-        base_url: https://open-api.divar.ir/v1/open-platform/users
+    oauth_phone_number:
+      base_url: https://open-api.divar.ir/v1/open-platform/users
 
   car:
     client_id: divarinow-general
     client_secret: fc893b8846daaaf8f51ee8e988ab84d124d354a73808d033ebe20569ff05b80610736ed397cd676fbe387cb2c179e4002df665a6b082d35e799a304dfafd2875
     api_key: eyJhbGciOiJSUzI1NiIsImtpZCI6InByaXZhdGVfa2V5XzIiLCJ0eXAiOiJKV1QifQ.eyJhcHBfc2x1ZyI6ImFnYWhpLXBsdXMtZ2VuZXJhbCIsImF1ZCI6InNlcnZpY2Vwcm92aWRlcnMiLCJleHAiOjE3NTY3MTYxMzcsImp0aSI6ImFmNDc5NjExLTI4YzMtMTFmMC1iZTMyLTRhNTRiMjcxYTdmNyIsImlhdCI6MTc0NjM0ODEzNywiaXNzIjoiZGl2YXIiLCJzdWIiOiJhcGlrZXkifQ.kxgCd8_cAYXCzKoCdMuAngE3ywO1XKIrSD-8lfQJYF8aYxbrVYoSUl1eSZUiGmxqtWqrVZFlGUby9E4dTMf7daq2Ilxpe8cd9JgiSur8YWzgspZvZpjrIuDcqArjUUFz-vkKN6BXgDA4GD63NN54-wanOaeyM_OqVmtiutU7wqw7UsqacpbWNwGq09B-pXwTBErJoLKqHJKbSJOKThU7aVCK_y1gIip0FblrhLDNdq0iFRvcow1SXoT7yS0kg1GwT8h3m07fmSS2UrKd6ze7PXJ4QC41EFzq9f5GDwaM3qPNjUJeqQT4msKgcZ-5-mrloNUM6oAhp1Q9YPfPDp2qFg
-    redirect_uri: https://api.divarinow.ir/v1/user/oauth
+    redirect_uri: https://api.divarinow.ir/v1/user/oauth/car
     image: 368c02f2-340b-4602-83a5-efc2b3d2407b.jpg
     scopes: USER_PHONE POST_ADDON_CREATE.
 
@@ -56,29 +56,22 @@ divar:
       base_url: https://oauth.divar.ir/oauth2/auth?response_type=%s&client_id=%s&redirect_uri=%s&scope=%s&state=%s
       response_type: code
 
-      oauth_token:
-        base_url: https://oauth.divar.ir/oauth2/token
-        grant_type: authorization_code
+    oauth_token:
+      base_url: https://oauth.divar.ir/oauth2/token
+      grant_type: authorization_code
 
-      oauth_phone_number:
-        base_url: https://open-api.divar.ir/v1/open-platform/users
-
+    oauth_phone_number:
+      base_url: https://open-api.divar.ir/v1/open-platform/users
 
 app:
   salt: _E[*.61P.wA;-M>sS>Gb?@ZVd&>zp"C=A=R=p+.=K0d7CQ1R\WX;froI?wY![io`7Hk`<p=:xlK{nA<T[22H,ziR0Nv-BqweuMca+cZ1gR&D<J[6_s<,ko[Yh!aooK~C
   inquiry_cost: 150000
 
-  inquiry_repo:
-    inquiry_by_barcode_url: https://core.inquiry.ayantech.ir/webservices/Core.svc/NajiServiceVehicleAuthenticityByBarcode
-    inquiry_by_green_number_url: https://core.inquiry.ayantech.ir/webservices/Core.svc/NajiServiceVehicleAuthenticityByDocumentNumber
-    inquiry_api_token: D1CB46989B154B919EF76217F3435528
-    owner_national_id: 002
-    wallet_identifier: 111
-
   front_end_login_redirect: https://divarinow.ir/%s?pn=%s&t=%s&tt=%s
   front_end_purchase_redirect: https://divarinow.ir/payment?status=%d&ref_id=%s
   front_end_access_denied_redirect: https://divarinow.ir/request?state=%s&service=%s
   front_end_entry_redirect: https://divarinow.ir/entry
+
   llm_api_key: aa-JDpuqsYctmaNiypjpigyO1x45xn1EgfXB8hHO73T0QyGg5Zw
   llm_url: https://api.avalapis.ir/v1
 
@@ -90,7 +83,7 @@ app:
   test: false
 
   kenar_redirect_base_url: https://divarinow.ir/kenar?code=%s&ref=%s
-  kenar_divar_button: https://api.divarinow.ir/profile/kenar/
+  kenar_divar_button: https://api.divarinow.ir/v1/profile/kenar/
 
 jwt:
   secret: ;3A4caF_kc7|nB]RZvYk7<'`2(}#sEEi?upq&miG&RdxSHF3P)l1|f6$(BQK"[lr1219EbkZ{RRo|ci3<UW~M9p!L"[4|Q7cRr_$

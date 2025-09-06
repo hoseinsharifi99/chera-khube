@@ -5,7 +5,7 @@ import (
 )
 
 type PostApiRepo interface {
-	Get(token string, erviceName string) (*model.Post, error)
+	Get(token string, ServiceName string) (*model.Post, error)
 }
 
 type PostDbRepo interface {
