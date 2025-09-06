@@ -34,11 +34,11 @@ type divarConfig struct {
 }
 
 type divarApi struct {
-	GetPosts     string `json:"get_posts"`
-	GetPost      string `json:"get_post"`
-	EditPost     string `json:"edit_post"`
-	DeleteWidget string `json:"delete_widget"`
-	Addons       string `json:"addons"`
+	GetPosts     string `mapstructure:"get_posts"`
+	GetPost      string `mapstructure:"get_post"`
+	EditPost     string `mapstructure:"edit_post"`
+	DeleteWidget string `mapstructure:"delete_widget"`
+	Addons       string `mapstructure:"addons"`
 }
 
 type divar struct {
