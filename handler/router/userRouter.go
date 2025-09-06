@@ -19,7 +19,7 @@ func (r userRouter) HandleRoutes(router *gin.Engine, config *helper.ServiceConfi
 	user := router.Group("v1").Group("user")
 	user.GET("login/divar/:service", r.userController.LoginWithDivar)
 	user.GET("login/divar/call/:service", r.userController.CallOAuth)
-	user.GET("oauth", r.userController.OAuth)
+	user.GET("oauth/:service", r.userController.OAuth)
 	user.GET("balance", middlewares.Jwt(config), r.userController.GetBalance)
 	user.POST("register", r.userController.Register)
 	user.POST("login", r.userController.Login)
