@@ -28,6 +28,7 @@ func NewPostApi(
 }
 
 func (i postApi) Get(token string, serviceName string) (*model.Post, error) {
+	log.Println(i.config.Divar)
 	endPoint := getPostUrl(i.config.Divar.Api.GetPost, token)
 	log.Println("endpoind: ", endPoint)
 	method := "GET"
