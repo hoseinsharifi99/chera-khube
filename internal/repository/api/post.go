@@ -29,13 +29,15 @@ func NewPostApi(
 
 func (i postApi) Get(token string, serviceName string) (*model.Post, error) {
 	endPoint := getPostUrl(i.config.Divar.Api.GetPost, token)
-
+	log.Println("endpoind: ", endPoint)
 	method := "GET"
 	req, err := http.NewRequest(method, endPoint, nil)
 	if err != nil {
 		return nil, err
 	}
+
 	config := i.config.GetDivarConfig(serviceName)
+
 	req.Header.Add("x-api-key", config.ApiKey)
 	client := &http.Client{}
 	resp, err := client.Do(req)

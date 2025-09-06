@@ -7,6 +7,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"log"
 )
 
 type PostService interface {
@@ -61,6 +62,7 @@ func (s postService) Get(user *model.User, serviceName string) (*model.Post, *mo
 		post.UserID = user.ID
 		post, err = s.postDbRepo.Insert(post)
 		if err != nil {
+			log.Println("post service line 65 err:", err.Error())
 			return nil, nil, 0, err
 		}
 
