@@ -51,6 +51,7 @@ func (u userController) LoginWithDivar(ctx *gin.Context) {
 func (u userController) CallOAuth(ctx *gin.Context) {
 	serviceName := ctx.Param("service")
 	redirectUrl := u.userService.LoginWithDivar(ctx, serviceName)
+	log.Println("call oauth:", redirectUrl)
 	ctx.Redirect(http.StatusTemporaryRedirect, redirectUrl)
 }
 
