@@ -17,9 +17,9 @@ func NewAddonsRouter(addonsController controller.AddonsController) Router {
 
 func (r addonsRouter) HandleRoutes(router *gin.Engine, config *helper.ServiceConfig) {
 	user := router.Group("v1").Group("addons")
-	user.GET("create/:codes", middlewares.Jwt(config), r.addonsController.CreateAddons)
-	user.GET("add/widget", middlewares.Jwt(config), r.addonsController.AddAddons)
-	user.GET("widget", middlewares.Jwt(config), r.addonsController.GetAddons)
-	user.DELETE("widget", middlewares.Jwt(config), r.addonsController.DeleteWidget)
+	user.GET("create/:codes/:service", middlewares.Jwt(config), r.addonsController.CreateAddons)
+	user.POST("add/widget/:service", middlewares.Jwt(config), r.addonsController.AddAddons)
+	user.GET("widget/:service", middlewares.Jwt(config), r.addonsController.GetAddons)
+	user.DELETE("widget/:service", middlewares.Jwt(config), r.addonsController.DeleteWidget)
 	user.GET("config", r.addonsController.GetConfig)
 }
