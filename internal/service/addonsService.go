@@ -12,12 +12,11 @@ import (
 )
 
 type AddonsService interface {
-	AddWidgetToPost(ctx *gin.Context) (*model.Adons, float64, error)
-	EditAllDescription(ctx *gin.Context, postToken string) (*model.Post, int, error)
-	CreateAddons(ctx *gin.Context, postToken, codes string) (*model.Post, *model.Adons, int, error)
+	AddWidgetToPost(ctx *gin.Context, serviceName string) (*model.Adons, float64, error)
+	CreateAddons(ctx *gin.Context, postToken, codes string, serviceName string) (*model.Post, *model.Adons, int, error)
 	GetAllNewDesc(ctx *gin.Context, postToken string) (*model.Post, int, error)
-	AddWidget(postToken, accessToken string, wid map[string]string, addons model.Adons) error
-	DeleteWidget(ctx *gin.Context) error
+	AddWidget(postToken, accessToken string, wid map[string]string, addons model.Adons, serviceName string) error
+	DeleteWidget(ctx *gin.Context, serviceName string) error
 	GetConfig() []model.Config
 	GetAddons(ctx *gin.Context) (*model.Adons, int, error)
 }
@@ -58,7 +57,7 @@ func NewAddonsService(
 	}
 }
 
-func (s addonsService) AddWidgetToPost(ctx *gin.Context) (*model.Adons, float64, error) {
+func (s addonsService) AddWidgetToPost(ctx *gin.Context, serviceName string) (*model.Adons, float64, error) {
 	user, err := s.userService.GetUserWithContext(ctx)
 	if err != nil {
 		return nil, 0, err
@@ -80,7 +79,7 @@ func (s addonsService) AddWidgetToPost(ctx *gin.Context) (*model.Adons, float64,
 		ConfMap[c] = AConf[c]
 	}
 
-	err = s.AddWidget(post.Token, user.AccessToken, ConfMap, *ad)
+	err = s.AddWidget(post.Token, user.AccessToken, ConfMap, *ad, serviceName)
 	if err != nil {
 		log.Println("error on add widget", err.Error())
 		return ad, float64(user.Balance), err
@@ -96,7 +95,7 @@ func (s addonsService) AddWidgetToPost(ctx *gin.Context) (*model.Adons, float64,
 	return ad, float64(user.Balance), err
 }
 
-func (s addonsService) AddWidgetToPostAfterCreate(ad *model.Adons, post *model.Post, accessToken string) (*model.Adons, error) {
+func (s addonsService) AddWidgetToPostAfterCreate(ad *model.Adons, post *model.Post, accessToken string, serviceName string) (*model.Adons, error) {
 	if ad.Codes == nil {
 		return ad, errors.New("code is nil")
 	}
@@ -108,7 +107,7 @@ func (s addonsService) AddWidgetToPostAfterCreate(ad *model.Adons, post *model.P
 		ConfMap[c] = AConf[c]
 	}
 
-	err := s.AddWidget(post.Token, accessToken, ConfMap, *ad)
+	err := s.AddWidget(post.Token, accessToken, ConfMap, *ad, serviceName)
 	if err != nil {
 		log.Println("error on add widget", err.Error())
 		return ad, err
@@ -124,36 +123,11 @@ func (s addonsService) AddWidgetToPostAfterCreate(ad *model.Adons, post *model.P
 	return ad, err
 }
 
-func (s addonsService) EditAllDescription(ctx *gin.Context, postToken string) (*model.Post, int, error) {
-	user, err := s.userService.GetUserWithContext(ctx)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	post, _, _, err := s.postService.Get(user)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	err = s.divarRepo.EditAllDescription(postToken, user.AccessToken, "*post.NewDesc")
-	if err != nil {
-		return nil, 0, err
-	}
-
-	post.IsConnected = true
-	err = s.postService.UpdatePost(post)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	return post, user.Balance, nil
-}
-
 func (s addonsService) GetConfig() []model.Config {
 	return s.configRepo.List()
 }
 
-func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string) (*model.Post, *model.Adons, int, error) {
+func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string, serviceName string) (*model.Post, *model.Adons, int, error) {
 	user, err := s.userService.GetUserWithContext(ctx)
 	if err != nil {
 		return nil, nil, 0, err
@@ -195,7 +169,7 @@ func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string) (
 		return nil, nil, 0, err
 	}
 
-	addons, err = s.AddWidgetToPostAfterCreate(addons, post, user.AccessToken)
+	addons, err = s.AddWidgetToPostAfterCreate(addons, post, user.AccessToken, serviceName)
 	if err != nil {
 		return nil, nil, user.Balance, err
 	}
@@ -234,10 +208,10 @@ func (s addonsService) GetAllNewDesc(ctx *gin.Context, postToken string) (*model
 	return post, balance, nil
 }
 
-func (s addonsService) AddWidget(postToken, accessToken string, wid map[string]string, addons model.Adons) error {
+func (s addonsService) AddWidget(postToken, accessToken string, wid map[string]string, addons model.Adons, serviceName string) error {
 	widget := s.createWidgets(wid, addons)
 
-	err := s.widgetRepo.Send(widget, postToken, accessToken)
+	err := s.widgetRepo.Send(widget, postToken, accessToken, serviceName)
 	if err != nil {
 		return err
 	}
@@ -245,13 +219,13 @@ func (s addonsService) AddWidget(postToken, accessToken string, wid map[string]s
 	return nil
 }
 
-func (s addonsService) DeleteWidget(ctx *gin.Context) error {
+func (s addonsService) DeleteWidget(ctx *gin.Context, serviceName string) error {
 	user, err := s.userService.GetUserWithContext(ctx)
 	if err != nil {
 		return err
 	}
 
-	err = s.widgetRepo.Delete(user.PostToken, user.AccessToken)
+	err = s.widgetRepo.Delete(user.PostToken, user.AccessToken, serviceName)
 	if err != nil {
 		return err
 	}
@@ -259,8 +233,8 @@ func (s addonsService) DeleteWidget(ctx *gin.Context) error {
 	return nil
 }
 
-func (s addonsService) DeleteByPostTokenWidget(postToken, accessToken string) error {
-	err := s.widgetRepo.Delete(postToken, accessToken)
+func (s addonsService) DeleteByPostTokenWidget(postToken, accessToken string, serviceName string) error {
+	err := s.widgetRepo.Delete(postToken, accessToken, serviceName)
 	if err != nil {
 		return err
 	}

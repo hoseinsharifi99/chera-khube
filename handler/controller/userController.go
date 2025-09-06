@@ -1,9 +1,7 @@
 package controller
 
 import (
-	"chera_khube/internal/constant"
 	"chera_khube/internal/helper"
-	"chera_khube/internal/model"
 	"chera_khube/internal/repository"
 	"chera_khube/internal/service"
 	"fmt"
@@ -17,7 +15,6 @@ import (
 type UserController interface {
 	LoginWithDivar(ctx *gin.Context)
 	OAuth(ctx *gin.Context)
-	ProfileOAuth(ctx *gin.Context)
 	Register(ctx *gin.Context)
 	Login(ctx *gin.Context)
 	GetBalance(ctx *gin.Context)
@@ -41,26 +38,14 @@ func NewUserController(userService service.UserService, appLog repository.AppLog
 }
 
 func (u userController) LoginWithDivar(ctx *gin.Context) {
-	//serviceName := ctx.Param("service")
+	serviceName := ctx.Param("service")
 	postToken := ctx.Query("post_token")
 	returnUrl := ctx.Query("return_url")
 
-	redirectUrl := fmt.Sprintf(u.config.App.KhuneFrontEndEntryRedirect+"?post_token=%s&return_url=%s", postToken, returnUrl)
-	fmt.Println("redurect:", returnUrl)
+	redirectUrl := fmt.Sprintf(u.config.App.FrontEndEntryRedirect+"/"+serviceName+"?post_token=%s&return_url=%s", postToken, returnUrl, serviceName)
+	fmt.Println("redirect to:", returnUrl)
 	ctx.Redirect(http.StatusTemporaryRedirect, redirectUrl)
 	return
-	//if serviceName == constant.LinkPlusServiceName {
-	//	redirectUrl := fmt.Sprintf(u.config.App.KhuneFrontEndEntryRedirect+"?post_token=%s&return_url=%s", postToken, returnUrl)
-	//	ctx.Redirect(http.StatusTemporaryRedirect, redirectUrl)
-	//	return
-	//} else if serviceName == constant.AgahiPlusServiceName {
-	//	redirectUrl := fmt.Sprintf(u.config.App.AgahiFrontEndEntryRedirect+"?post_token=%s&return_url=%s", postToken, returnUrl)
-	//	ctx.Redirect(http.StatusTemporaryRedirect, redirectUrl)
-	//	return
-	//}
-	//
-	//redirectUrl := u.userService.LoginWithDivar(ctx, serviceName)
-	//ctx.Redirect(http.StatusTemporaryRedirect, redirectUrl)
 }
 
 func (u userController) CallOAuth(ctx *gin.Context) {
@@ -70,8 +55,11 @@ func (u userController) CallOAuth(ctx *gin.Context) {
 }
 
 func (u userController) OAuth(ctx *gin.Context) {
-	user, err := u.userService.OAuth(ctx)
+	srv := ctx.Param("service")
+
+	user, err := u.userService.OAuth(ctx, srv)
 	postToken := ctx.Query("state")
+
 	if err != nil {
 		log.Println(err.Error())
 		//redirect to access denied page:
@@ -81,50 +69,6 @@ func (u userController) OAuth(ctx *gin.Context) {
 	}
 
 	redirectUrl := fmt.Sprintf(u.config.App.FrontEndLoginRedirect, user.PhoneNumber, user.JwtToken, user.JwtExpireAt.Format("2006-01-02 15:04:05"), user.PostToken)
-	ctx.SetCookie("token", user.JwtToken, int(user.JwtExpireAt.Sub(time.Now()).Seconds()), "/", "", false, true)
-	ctx.Redirect(http.StatusTemporaryRedirect, redirectUrl)
-}
-
-func (u userController) ProfileOAuth(ctx *gin.Context) {
-	srv := ctx.Param("service")
-	if srv == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "service is empty"})
-		ctx.Abort()
-		return
-	}
-
-	var user *model.User
-	var err error
-	postToken := ""
-	redirectUrl := ""
-	if srv == constant.LinkPlusServiceName {
-		user, err = u.userService.ProfileOAuth(ctx)
-		postToken = ctx.Query("state")
-
-		if err != nil {
-			log.Println(err.Error())
-			//redirect to access denied page:
-			redirectUrl := fmt.Sprintf(u.config.App.FrontEndAccessDeniedRedirect, postToken, constant.LinkPlusServiceName)
-			ctx.Redirect(http.StatusTemporaryRedirect, redirectUrl)
-			return
-		}
-
-		redirectUrl = fmt.Sprintf(u.config.App.ProfileFrontEndLoginRedirect, user.PhoneNumber, user.JwtToken, user.JwtExpireAt.Format("2006-01-02 15:04:05"), user.PostToken, "profile")
-	} else {
-		user, err = u.userService.AgahiOAuth(ctx)
-		postToken = ctx.Query("state")
-
-		if err != nil {
-			log.Println(err.Error())
-			//redirect to access denied page:
-			redirectUrl := fmt.Sprintf(u.config.App.FrontEndAccessDeniedRedirect, postToken, constant.Apartment)
-			ctx.Redirect(http.StatusTemporaryRedirect, redirectUrl)
-			return
-		}
-
-		redirectUrl = fmt.Sprintf(u.config.App.AgahiFrontEndLoginRedirect, user.PhoneNumber, user.JwtToken, user.JwtExpireAt.Format("2006-01-02 15:04:05"), user.PostToken)
-	}
-
 	ctx.SetCookie("token", user.JwtToken, int(user.JwtExpireAt.Sub(time.Now()).Seconds()), "/", "", false, true)
 	ctx.Redirect(http.StatusTemporaryRedirect, redirectUrl)
 }

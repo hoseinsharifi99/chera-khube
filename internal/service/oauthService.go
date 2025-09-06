@@ -13,13 +13,8 @@ import (
 
 type OAuthService interface {
 	LoginWithDivar(ctx *gin.Context, service string) string
-	GetToken(code string) (*dto.AccessTokenResponse, error)
-	GetTokenWithCustomRedirectUrl(code string, clientID string, clientSecret string, redirectUrl string) (*dto.AccessTokenResponse, error)
-	GetProfileToken(code string) (*dto.AccessTokenResponse, error)
-	GetAgahiToken(code string) (*dto.AccessTokenResponse, error)
-	GetPhoneNumber(accessToken string) (*dto.PhoneNumberResponse, error)
-	GetProfilePhoneNumber(accessToken string) (*dto.PhoneNumberResponse, error)
-	GetAgahiPhoneNumber(accessToken string) (*dto.PhoneNumberResponse, error)
+	GetToken(code string, service string) (*dto.AccessTokenResponse, error)
+	GetPhoneNumber(accessToken string, service string) (*dto.PhoneNumberResponse, error)
 	AdsEntry(ctx *gin.Context, service string) string
 }
 
@@ -33,59 +28,12 @@ func NewOAuthService(repository repository.OAuthRepository, Config *helper.Servi
 	return oAuthService{repository: repository, Config: Config, logger: logger}
 }
 
-func (s oAuthService) GetToken(code string) (*dto.AccessTokenResponse, error) {
-	return s.repository.GetToken(dto.OAuthToken{
-		BaseUrl:      s.Config.Divar.OAuthToken.BaseUrl,
-		Code:         code,
-		ClientID:     s.Config.Divar.ClientID,
-		ClientSecret: s.Config.Divar.ClientSecret,
-		GrantType:    s.Config.Divar.OAuthToken.GrantType,
-		RedirectUri:  s.Config.Divar.RedirectUrl,
-	})
-}
+func (s oAuthService) GetPhoneNumber(accessToken string, service string) (*dto.PhoneNumberResponse, error) {
+	config := s.Config.GetDivarConfig(service)
 
-func (s oAuthService) GetAgahiToken(code string) (*dto.AccessTokenResponse, error) {
-	return s.repository.GetToken(dto.OAuthToken{
-		BaseUrl:      s.Config.AgahiPlus.OAuthToken.BaseUrl,
-		Code:         code,
-		ClientID:     s.Config.AgahiPlus.ClientID,
-		ClientSecret: s.Config.AgahiPlus.ClientSecret,
-		GrantType:    s.Config.AgahiPlus.OAuthToken.GrantType,
-		RedirectUri:  s.Config.AgahiPlus.RedirectUrl,
-	})
-}
-
-func (s oAuthService) GetProfileToken(code string) (*dto.AccessTokenResponse, error) {
-	return s.repository.GetToken(dto.OAuthToken{
-		BaseUrl:      s.Config.CarDivar.OAuthToken.BaseUrl,
-		Code:         code,
-		ClientID:     s.Config.CarDivar.ClientID,
-		ClientSecret: s.Config.CarDivar.ClientSecret,
-		GrantType:    s.Config.CarDivar.OAuthToken.GrantType,
-		RedirectUri:  s.Config.CarDivar.RedirectUrl,
-	})
-}
-
-func (s oAuthService) GetPhoneNumber(accessToken string) (*dto.PhoneNumberResponse, error) {
 	return s.repository.GetPhoneNumber(dto.PhoneNumber{
-		BaseUrl:     s.Config.Divar.OAuthPhoneNumber.BaseUrl,
-		ApiKey:      s.Config.Divar.ApiKey,
-		AccessToken: accessToken,
-	})
-}
-
-func (s oAuthService) GetProfilePhoneNumber(accessToken string) (*dto.PhoneNumberResponse, error) {
-	return s.repository.GetPhoneNumber(dto.PhoneNumber{
-		BaseUrl:     s.Config.CarDivar.OAuthPhoneNumber.BaseUrl,
-		ApiKey:      s.Config.CarDivar.ApiKey,
-		AccessToken: accessToken,
-	})
-}
-
-func (s oAuthService) GetAgahiPhoneNumber(accessToken string) (*dto.PhoneNumberResponse, error) {
-	return s.repository.GetPhoneNumber(dto.PhoneNumber{
-		BaseUrl:     s.Config.AgahiPlus.OAuthPhoneNumber.BaseUrl,
-		ApiKey:      s.Config.AgahiPlus.ApiKey,
+		BaseUrl:     config.OAuthPhoneNumber.BaseUrl,
+		ApiKey:      config.ApiKey,
 		AccessToken: accessToken,
 	})
 }
@@ -99,12 +47,10 @@ func (s oAuthService) LoginWithDivar(ctx *gin.Context, service string) string {
 	state := postToken
 
 	var url string
-	if service == constant.Apartment {
-		url = fmt.Sprintf(s.Config.Divar.OAuth.BaseUrl, s.Config.Divar.OAuth.ResponseType, s.Config.Divar.ClientID, s.Config.Divar.RedirectUrl, "USER_PHONE POST_ADDON_CREATE."+postToken, state)
-	} else if service == constant.LinkPlusServiceName {
-		url = fmt.Sprintf(s.Config.CarDivar.OAuth.BaseUrl, s.Config.CarDivar.OAuth.ResponseType, s.Config.CarDivar.ClientID, s.Config.CarDivar.RedirectUrl, "USER_PHONE offline_access USER_ADDON_CREATE", state)
+	if service == constant.ApartmentServiceName {
+		url = fmt.Sprintf(s.Config.Divar.Apartment.OAuth.BaseUrl, s.Config.Divar.Apartment.OAuth.ResponseType, s.Config.Divar.Apartment.ClientID, s.Config.Divar.Apartment.RedirectUrl, s.Config.Divar.Apartment.Scopes+postToken, state)
 	} else {
-		url = fmt.Sprintf(s.Config.Divar.OAuth.BaseUrl, s.Config.Divar.OAuth.ResponseType, s.Config.Divar.ClientID, s.Config.Divar.RedirectUrl, "USER_PHONE POST_EDIT."+postToken, state)
+		url = fmt.Sprintf(s.Config.Divar.Car.OAuth.BaseUrl, s.Config.Divar.Car.OAuth.ResponseType, s.Config.Divar.Car.ClientID, s.Config.Divar.Car.RedirectUrl, s.Config.Divar.Car.Scopes+postToken, state)
 	}
 
 	return url
@@ -112,24 +58,24 @@ func (s oAuthService) LoginWithDivar(ctx *gin.Context, service string) string {
 
 func (s oAuthService) AdsEntry(ctx *gin.Context, service string) string {
 	var url string
-	if service == constant.Apartment {
-		url = fmt.Sprintf(s.Config.Divar.OAuth.BaseUrl, s.Config.Yektanet.AgahiPlus.ResponseType, s.Config.Yektanet.AgahiPlus.ClientID, s.Config.Yektanet.AgahiPlus.RedirectUrl, "USER_POSTS_GET", uuid.New().String()+"__"+service)
-	} else if service == constant.LinkPlusServiceName {
-		url = fmt.Sprintf(s.Config.Divar.OAuth.BaseUrl, s.Config.Yektanet.LinkPlus.ResponseType, s.Config.Yektanet.LinkPlus.ClientID, s.Config.Yektanet.LinkPlus.RedirectUrl, "USER_POSTS_GET", uuid.New().String()+"__"+service)
-	} else {
-		url = fmt.Sprintf(s.Config.Divar.OAuth.BaseUrl, s.Config.Yektanet.Apartment.ResponseType, s.Config.Yektanet.Apartment.ClientID, s.Config.Yektanet.Apartment.RedirectUrl, "USER_POSTS_GET", uuid.New().String()+"__"+service)
+	config := s.Config.GetDivarConfig(service)
+
+	if service == constant.ApartmentServiceName {
+		url = fmt.Sprintf(config.OAuth.BaseUrl, s.Config.Yektanet.Apartment.ResponseType, s.Config.Yektanet.Apartment.ClientID, s.Config.Yektanet.Apartment.RedirectUrl, "USER_POSTS_GET", uuid.New().String()+"__"+service)
 	}
 
 	return url
 }
 
-func (s oAuthService) GetTokenWithCustomRedirectUrl(code string, clientID string, clientSecret string, redirectUrl string) (*dto.AccessTokenResponse, error) {
+func (s oAuthService) GetToken(code string, service string) (*dto.AccessTokenResponse, error) {
+	config := s.Config.GetDivarConfig(service)
+
 	return s.repository.GetToken(dto.OAuthToken{
-		BaseUrl:      s.Config.Divar.OAuthToken.BaseUrl,
+		BaseUrl:      config.OAuthToken.BaseUrl,
 		Code:         code,
-		ClientID:     clientID,
-		ClientSecret: clientSecret,
-		GrantType:    s.Config.Divar.OAuthToken.GrantType,
-		RedirectUri:  redirectUrl,
+		ClientID:     config.ClientID,
+		ClientSecret: config.ClientSecret,
+		GrantType:    config.OAuthToken.GrantType,
+		RedirectUri:  config.RedirectUrl,
 	})
 }

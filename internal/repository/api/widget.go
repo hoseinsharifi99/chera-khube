@@ -28,8 +28,9 @@ func NewWidgetApi(
 	}
 }
 
-func (i widgetApi) Delete(postToken, accessToken string) error {
-	endPoint := deleteURL(i.config.Divar.DeleteWidget, postToken)
+func (i widgetApi) Delete(postToken, accessToken string, service string) error {
+	config := i.config.GetDivarConfig(service)
+	endPoint := deleteURL(i.config.Divar.Api.DeleteWidget, postToken)
 
 	method := "DELETE"
 	req, err := http.NewRequest(method, endPoint, nil)
@@ -37,7 +38,7 @@ func (i widgetApi) Delete(postToken, accessToken string) error {
 		return err
 	}
 
-	req.Header.Add("x-api-key", i.config.CarDivar.ApiKey)
+	req.Header.Add("x-api-key", config.ApiKey)
 	req.Header.Add("Authorization", "Bearer "+accessToken)
 
 	client := &http.Client{}
@@ -56,8 +57,10 @@ func (i widgetApi) Delete(postToken, accessToken string) error {
 	return nil
 }
 
-func (i widgetApi) DeleteByPostToken(postToken, accessToken string) error {
-	endPoint := deletePostURL(i.config.CarDivar.DeleteWidget, postToken)
+func (i widgetApi) DeleteByPostToken(postToken, accessToken string, service string) error {
+	config := i.config.GetDivarConfig(service)
+
+	endPoint := deletePostURL(i.config.Divar.Api.DeleteWidget, postToken)
 
 	method := "DELETE"
 	req, err := http.NewRequest(method, endPoint, nil)
@@ -65,7 +68,7 @@ func (i widgetApi) DeleteByPostToken(postToken, accessToken string) error {
 		return err
 	}
 
-	req.Header.Add("x-api-key", i.config.CarDivar.ApiKey)
+	req.Header.Add("x-api-key", config.ApiKey)
 	req.Header.Add("Authorization", "Bearer "+accessToken)
 
 	client := &http.Client{}
@@ -84,8 +87,10 @@ func (i widgetApi) DeleteByPostToken(postToken, accessToken string) error {
 	return nil
 }
 
-func (i widgetApi) Send(widget *model.DivarWidget, postToken, accessToken string) error {
-	endPoint := addOnsURL(i.config.Divar.AddOns, postToken)
+func (i widgetApi) Send(widget *model.DivarWidget, postToken, accessToken string, service string) error {
+	config := i.config.GetDivarConfig(service)
+
+	endPoint := addOnsURL(i.config.Divar.Api.Addons, postToken)
 
 	body, err := json.Marshal(widget)
 	if err != nil {
@@ -98,7 +103,7 @@ func (i widgetApi) Send(widget *model.DivarWidget, postToken, accessToken string
 		return err
 	}
 
-	req.Header.Add("x-api-key", i.config.CarDivar.ApiKey)
+	req.Header.Add("x-api-key", config.ApiKey)
 	req.Header.Add("Authorization", "Bearer "+accessToken)
 
 	client := &http.Client{}

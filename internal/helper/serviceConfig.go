@@ -1,18 +1,19 @@
 package helper
 
-import "chera_khube/internal/database"
+import (
+	"chera_khube/internal/constant"
+	"chera_khube/internal/database"
+)
 
 type ServiceConfig struct {
-	System    systemConfig    `mapstructure:"system"`
-	Database  database.Config `mapstructure:"database"`
-	Http      httpConfig      `mapstructure:"http"`
-	Divar     divar           `mapstructure:"divar"`
-	App       app             `mapstructure:"app"`
-	CarDivar  divar           `mapstructure:"car"`
-	AgahiPlus divar           `mapstructure:"agahi"`
-	JWT       jwtConfig       `mapstructure:"jwt"`
-	Zarinpal  zarinpal        `mapstructure:"zarinpal"`
-	Yektanet  yekranet        `mapstructure:"yektanet"`
+	System   systemConfig    `mapstructure:"system"`
+	Database database.Config `mapstructure:"database"`
+	Http     httpConfig      `mapstructure:"http"`
+	Divar    divarConfig     `mapstructure:"divar"`
+	App      app             `mapstructure:"app"`
+	JWT      jwtConfig       `mapstructure:"jwt"`
+	Zarinpal zarinpal        `mapstructure:"zarinpal"`
+	Yektanet yekranet        `mapstructure:"yektanet"`
 }
 
 type systemConfig struct {
@@ -26,21 +27,29 @@ type httpConfig struct {
 	Port string `mapstructure:"port"`
 }
 
+type divarConfig struct {
+	Apartment divar    `mapstructure:"apartment"`
+	Car       divar    `mapstructure:"car"`
+	Api       divarApi `mapstructure:"api"`
+}
+
+type divarApi struct {
+	GetPosts     string `json:"get_posts"`
+	GetPost      string `json:"get_post"`
+	EditPost     string `json:"edit_post"`
+	DeleteWidget string `json:"delete_widget"`
+	Addons       string `json:"addons"`
+}
+
 type divar struct {
-	ClientID           string                `mapstructure:"client_id"`
-	ClientSecret       string                `mapstructure:"client_secret"`
-	ApiKey             string                `mapstructure:"api_key"`
-	RedirectUrl        string                `mapstructure:"redirect_uri"`
-	OAuth              divarOauth            `mapstructure:"oauth"`
-	OAuthToken         divarOauthToken       `mapstructure:"oauth_token"`
-	OAuthPhoneNumber   divarOauthPhoneNumber `mapstructure:"oauth_phone_number"`
-	AddOns             string                `mapstructure:"add_ons"`
-	DeleteWidget       string                `mapstructure:"delete_widget"`
-	DeleteWidgetByPost string                `mapstructure:"delete_widget_by_post"`
-	Image              string                `mapstructure:"image"`
-	GetPost            string                `mapstructure:"get_post"`
-	EditPost           string                `mapstructure:"edit_post"`
-	GetPosts           string                `mapstructure:"get_posts"`
+	ClientID         string                `mapstructure:"client_id"`
+	ClientSecret     string                `mapstructure:"client_secret"`
+	ApiKey           string                `mapstructure:"api_key"`
+	RedirectUrl      string                `mapstructure:"redirect_uri"`
+	OAuth            divarOauth            `mapstructure:"oauth"`
+	OAuthToken       divarOauthToken       `mapstructure:"oauth_token"`
+	OAuthPhoneNumber divarOauthPhoneNumber `mapstructure:"oauth_phone_number"`
+	Scopes           string                `mapstructure:"scopes"`
 }
 
 type divarOauth struct {
@@ -62,12 +71,9 @@ type app struct {
 	InquiryCost                  int         `mapstructure:"inquiry_cost"`
 	InquiryRepo                  InquiryRepo `mapstructure:"inquiry_repo"`
 	FrontEndLoginRedirect        string      `mapstructure:"front_end_login_redirect"`
-	ProfileFrontEndLoginRedirect string      `mapstructure:"profile_front_end_login_redirect"`
-	AgahiFrontEndLoginRedirect   string      `mapstructure:"agahi_front_end_login_redirect"`
 	FrontEndPurchaseRedirect     string      `mapstructure:"front_end_purchase_redirect"`
 	FrontEndAccessDeniedRedirect string      `mapstructure:"front_end_access_denied_redirect"`
-	KhuneFrontEndEntryRedirect   string      `mapstructure:"profile_front_end_entry_redirect"`
-	AgahiFrontEndEntryRedirect   string      `mapstructure:"agahi_front_end_entry_redirect"`
+	FrontEndEntryRedirect        string      `mapstructure:"front_end_entry_redirect"`
 	Hash                         Hash        `mapstructure:"hash"`
 	Test                         bool        `mapstructure:"test"`
 	Kenar                        string      `mapstructure:"kenar_redirect_base_url"`
@@ -104,12 +110,23 @@ type Hash struct {
 type yekranet struct {
 	FrontRedirectUrl string              `mapstructure:"front_redirect_url"`
 	Apartment        yektanetDivarConfig `mapstructure:"apartment"`
-	AgahiPlus        yektanetDivarConfig `mapstructure:"agahi_plus"`
-	LinkPlus         yektanetDivarConfig `mapstructure:"link_plus"`
+	Car              yektanetDivarConfig `mapstructure:"car"`
 }
 
 type yektanetDivarConfig struct {
 	RedirectUrl  string `mapstructure:"redirect_url"`
 	ClientID     string `mapstructure:"client_id"`
 	ResponseType string `mapstructure:"response_type"`
+}
+
+func (c *ServiceConfig) GetDivarConfig(service string) divar {
+	var config divar
+	switch service {
+	case constant.ApartmentServiceName:
+		config = c.Divar.Apartment
+	case constant.CarServiceName:
+		config = c.Divar.Car
+	}
+
+	return config
 }

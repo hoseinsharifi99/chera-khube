@@ -23,7 +23,9 @@ type addonsController struct {
 
 func (a addonsController) CreateAddons(ctx *gin.Context) {
 	codes := ctx.Param("codes")
-	post, addons, balance, err := a.addonsService.CreateAddons(ctx, "postToken", codes)
+	srv := ctx.Param("service")
+
+	post, addons, balance, err := a.addonsService.CreateAddons(ctx, "postToken", codes, srv)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		ctx.Abort()
@@ -45,7 +47,9 @@ func (a addonsController) GetAddons(ctx *gin.Context) {
 }
 
 func (a addonsController) DeleteWidget(ctx *gin.Context) {
-	err := a.addonsService.DeleteWidget(ctx)
+	srv := ctx.Param("service")
+
+	err := a.addonsService.DeleteWidget(ctx, srv)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		ctx.Abort()
@@ -56,7 +60,9 @@ func (a addonsController) DeleteWidget(ctx *gin.Context) {
 }
 
 func (a addonsController) AddAddons(ctx *gin.Context) {
-	addons, balance, err := a.addonsService.AddWidgetToPost(ctx)
+	srv := ctx.Param("service")
+
+	addons, balance, err := a.addonsService.AddWidgetToPost(ctx, srv)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		ctx.Abort()

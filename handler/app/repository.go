@@ -31,7 +31,6 @@ func (a *application) InitRepository(logger *zap.Logger) *repository {
 	repo.zarinpalApiRepository = api.NewZarinpal(a.config.Zarinpal.MerchantID, a.config.Zarinpal.Sandbox)
 	repo.userPaymentRepository = db.NewUserPaymentRepository(a.db, logger)
 	repo.postDBRepository = db.NewPostDb(a.db, logger)
-	repo.postApiRepository = api.NewPostApi(a.config, logger)
 	repo.pricingRepository = db.NewPricingDB(a.db, logger)
 	repo.divarRepository = api.NewDivarApi(a.config, logger)
 	repo.promptRepository = api.NewPromptApi(logger, a.config)

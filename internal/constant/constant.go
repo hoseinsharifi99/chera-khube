@@ -10,6 +10,5 @@ const (
 
 const (
 	ApartmentServiceName = "apartment"
-	LinkPlusServiceName  = "profile"
-	Apartment            = "apartment"
+	CarServiceName       = "car"
 )

@@ -9,8 +9,6 @@ import (
 )
 
 type DivarController interface {
-	EditPost(ctx *gin.Context)
-	EditAllPost(ctx *gin.Context)
 	CreateAddons(ctx *gin.Context)
 	GetAllDescription(ctx *gin.Context)
 }
@@ -34,29 +32,13 @@ func NewDivarController(
 
 func (c divarController) EditPost(ctx *gin.Context) {
 	postToken := ctx.Param("post-token")
+	srv := ctx.Param("service")
 
 	if postToken == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "empty post token"})
 	}
 
-	post, balance, err := c.divarService.AddWidgetToPost(ctx)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		ctx.Abort()
-		return
-	}
-
-	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "post": post, "balance": balance})
-}
-
-func (c divarController) EditAllPost(ctx *gin.Context) {
-	postToken := ctx.Param("post-token")
-
-	if postToken == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "empty post token"})
-	}
-
-	post, balance, err := c.divarService.EditAllDescription(ctx, postToken)
+	post, balance, err := c.divarService.AddWidgetToPost(ctx, srv)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		ctx.Abort()
