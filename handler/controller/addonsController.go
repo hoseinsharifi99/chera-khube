@@ -44,7 +44,7 @@ func (a addonsController) GetAddons(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "addons:": addons, "balance": balance})
+	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "addons": addons, "balance": balance})
 }
 
 func (a addonsController) DeleteWidget(ctx *gin.Context) {
