@@ -11,6 +11,8 @@ import (
 	"strings"
 )
 
+const description = "چرا این آگهی ارزشمده؟"
+
 type AddonsService interface {
 	AddWidgetToPost(ctx *gin.Context, serviceName string) (*model.Adons, float64, error)
 	CreateAddons(ctx *gin.Context, postToken, codes string, serviceName string) (*model.Post, *model.Adons, int, error)
@@ -148,10 +150,7 @@ func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string, s
 		addonsDesc += "و"
 	}
 
-	newDescription, err := s.promptService.CreateNewDescription(ctx, post.Data, addonsDesc)
-	if err != nil {
-		return nil, nil, 0, err
-	}
+	newDescription := description
 
 	addons := &model.Adons{
 		PostID:      post.ID,
@@ -212,6 +211,14 @@ func (s addonsService) DeleteByPostTokenWidget(postToken, accessToken string, se
 
 func (s addonsService) createWidgets(wd map[string]string, addons model.Adons) *model.DivarWidget {
 	var dWidget model.DivarWidget
+
+	var descriptionWidget model.DescriptionWidget
+	descriptionWidget.DescriptionRow.Text = addons.Description
+	descriptionWidget.DescriptionRow.HasDivider = false
+	descriptionWidget.DescriptionRow.Expandable = false
+
+	dWidget.Widgets = append(dWidget.Widgets, descriptionWidget)
+
 	for key, val := range wd {
 		var widget model.EventWidget
 		widget.EventRow.Title = val
@@ -220,13 +227,6 @@ func (s addonsService) createWidgets(wd map[string]string, addons model.Adons) *
 
 		dWidget.Widgets = append(dWidget.Widgets, widget)
 	}
-
-	var descriptionWidget model.DescriptionWidget
-	descriptionWidget.DescriptionRow.Text = addons.Description
-	descriptionWidget.DescriptionRow.HasDivider = false
-	descriptionWidget.DescriptionRow.Expandable = false
-
-	dWidget.Widgets = append(dWidget.Widgets, descriptionWidget)
 
 	return &dWidget
 }
