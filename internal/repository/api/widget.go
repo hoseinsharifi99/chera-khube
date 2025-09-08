@@ -7,6 +7,7 @@ import (
 	"chera_khube/internal/repository"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"go.uber.org/zap"
 	"log"
 	"net/http"
@@ -113,10 +114,10 @@ func (i widgetApi) Send(widget *model.DivarWidget, postToken, accessToken string
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		var response res
-		err = json.NewDecoder(resp.Body).Decode(&response)
-		return errors.New(response.Message)
+		_ = json.NewDecoder(resp.Body).Decode(&response)
+		return fmt.Errorf("addons error: %s (status %d)", response.Message, resp.StatusCode)
 	}
 
 	log.Println("DIVAR ADD WIDGET RESPONSE")
