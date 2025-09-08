@@ -221,9 +221,9 @@ func (s addonsService) createWidgets(wd map[string]string, addons model.Adons) *
 
 	for key, val := range wd {
 		var widget model.EventWidget
-		widget.EventRow.Title = val
-		widget.EventRow.IconName = key
-		widget.EventRow.HasDivider = false
+		widget.ScoreRow.Title = val
+		widget.ScoreRow.IconName = key
+		widget.ScoreRow.HasDivider = true
 
 		dWidget.Widgets = append(dWidget.Widgets, widget)
 	}

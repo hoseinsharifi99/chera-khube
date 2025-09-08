@@ -5,14 +5,14 @@ type DivarWidget struct {
 }
 
 type EventWidget struct {
-	EventRow struct {
-		Title      string `json:"title"`
-		Subtitle   string `json:"subtitle"`
-		Label      string `json:"label"`
-		ImageId    string `json:"image_id"`
-		HasDivider bool   `json:"has_divider"`
-		IconName   string `json:"icon_name"`
-	} `json:"event_row"`
+	ScoreRow struct {
+		Title            string `json:"title"`
+		DescriptiveScore string `json:"descriptive_score"`
+		ScoreColor       string `json:"score_color"`
+		ImageId          string `json:"image_id"`
+		HasDivider       bool   `json:"has_divider"`
+		IconName         string `json:"icon_name"`
+	} `json:"score_row"`
 }
 
 type DescriptionWidget struct {
