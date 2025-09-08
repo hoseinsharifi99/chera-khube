@@ -221,10 +221,10 @@ func (s addonsService) createWidgets(wd map[string]string, addons model.Adons) *
 		dWidget.Widgets = append(dWidget.Widgets, widget)
 	}
 
-	var descriptionWidget model.DescriptionRow
-	descriptionWidget.Text = addons.Description
-	descriptionWidget.HasDivider = false
-	descriptionWidget.Expandable = false
+	var descriptionWidget model.DescriptionWidget
+	descriptionWidget.DescriptionRow.Text = addons.Description
+	descriptionWidget.DescriptionRow.HasDivider = false
+	descriptionWidget.DescriptionRow.Expandable = false
 
 	dWidget.Widgets = append(dWidget.Widgets, descriptionWidget)
 

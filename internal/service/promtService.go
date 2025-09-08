@@ -29,7 +29,7 @@ func NewPromptService(promptRepo repository.PromptRepository, logger *zap.Logger
 }
 
 func (s promptService) CreateNewDescription(ctx *gin.Context, data, addons string) (string, error) {
-	promptText := fmt.Sprintf("این %s دیتای یک آگهی املاک است و از نظر آگهی گذار به این دلایل %s خوب است. لطفاً ۳ تا ۵ دلیل کوتاه و جذاب استخراج کن که نشان بده چرا این ملک خوب است. \nخروجی را به صورت خیلی کوتاه بده و ساده و تبلیغاتی بنویس.", data, addons)
+	promptText := fmt.Sprintf("این %s دیتای یک آگهی املاک است و از نظر آگهی گذار به این دلایل %s خوب است. خیلی خیلی دلیل کوتاه و جذاب استخراج کن که نشان بده چرا این ملک خوب است. \nخروجی را به صورت خیلی کوتاه بده و ساده و تبلیغاتی بنویس. باز تاکید میکنم خیلی کوتاه باشه زیر ۲۰۰ کارکتر", data, addons)
 	res, err := s.promptRepo.Get(ctx, promptText)
 	if err != nil {
 		return "", err

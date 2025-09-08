@@ -15,7 +15,7 @@ type EventWidget struct {
 	} `json:"event_row"`
 }
 
-type Response struct {
+type DescriptionWidget struct {
 	DescriptionRow DescriptionRow `json:"description_row"`
 }
 
