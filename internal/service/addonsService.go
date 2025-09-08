@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-const description = "چرا این آگهی ارزشمده؟"
+const description = "چرا این ملک خویه؟"
 
 type AddonsService interface {
 	AddWidgetToPost(ctx *gin.Context, serviceName string) (*model.Adons, float64, error)

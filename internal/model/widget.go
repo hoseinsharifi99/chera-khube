@@ -8,7 +8,6 @@ type EventWidget struct {
 	ScoreRow struct {
 		Title            string `json:"title"`
 		DescriptiveScore string `json:"descriptive_score"`
-		ScoreColor       string `json:"score_color"`
 		ImageId          string `json:"image_id"`
 		HasDivider       bool   `json:"has_divider"`
 		IconName         string `json:"icon_name"`
