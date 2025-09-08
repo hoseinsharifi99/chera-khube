@@ -32,7 +32,7 @@ func (a addonsController) CreateAddons(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "post": post, "addons:": addons, "balance": balance})
+	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "post": post, "addons": addons, "balance": balance})
 }
 
 func (a addonsController) GetAddons(ctx *gin.Context) {
