@@ -94,6 +94,7 @@ func (i widgetApi) Send(widget *model.DivarWidget, postToken, accessToken string
 	endPoint := addOnsURL(i.config.Divar.Api.Addons, postToken)
 
 	body, err := json.Marshal(widget)
+	fmt.Println("body", body)
 	if err != nil {
 		return err
 	}
