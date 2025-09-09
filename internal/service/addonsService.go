@@ -161,15 +161,15 @@ func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string, s
 
 	_, err = s.addonDbRepo.Insert(addons)
 
+	addons, err = s.AddWidgetToPostAfterCreate(addons, post, user.AccessToken, serviceName)
+	if err != nil {
+		return nil, nil, user.Balance, err
+	}
+
 	balance = user.Balance - 1
 	err = s.userService.UpdateBalance(user, balance)
 	if err != nil {
 		return nil, nil, 0, err
-	}
-
-	addons, err = s.AddWidgetToPostAfterCreate(addons, post, user.AccessToken, serviceName)
-	if err != nil {
-		return nil, nil, user.Balance, err
 	}
 
 	return post, addons, balance, nil
@@ -193,6 +193,17 @@ func (s addonsService) DeleteWidget(ctx *gin.Context, serviceName string) error 
 	}
 
 	err = s.widgetRepo.Delete(user.PostToken, user.AccessToken, serviceName)
+	if err != nil {
+		return err
+	}
+
+	_, ad, _, err := s.postService.GetPostByUser(ctx, serviceName)
+	if err != nil {
+		return err
+	}
+
+	ad.IsConnected = false
+	err = s.addonDbRepo.Update(ad)
 	if err != nil {
 		return err
 	}
