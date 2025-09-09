@@ -59,7 +59,7 @@ func (s *zarinpalService) NewPaymentRequest(ctx *gin.Context, planID int, servic
 	d := dto.PaymentRequestDto{
 		Amount:      int(price.Price) * 10,
 		CallbackUrl: fmt.Sprintf(s.config.Zarinpal.CallbackUrl, user.ID, int(price.Price*10), planID, serviceName),
-		Description: "اگهی پلاس",
+		Description: "دیوارینو",
 		Email:       fmt.Sprintf("%d@user.com", user.ID),
 		PhoneNumber: user.PhoneNumber,
 	}
