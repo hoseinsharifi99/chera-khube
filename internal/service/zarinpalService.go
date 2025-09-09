@@ -11,7 +11,6 @@ import (
 	"go.uber.org/zap"
 	"log"
 	"strconv"
-	"time"
 )
 
 type ZarinpalService interface {
@@ -125,13 +124,9 @@ func (s *zarinpalService) PaymentVerification(ctx *gin.Context, d dto.PaymentVer
 	}
 
 	//Update user balance
-	if price.ServiceID == 0 {
-		user.Balance = user.Balance + int(price.Token)
-		user.IsUse = true
-	} else {
-		user.ExpirationTime = time.Now().AddDate(0, int(price.Token), 0)
-		user.IsFirstProfileBuy = true
-	}
+
+	user.Balance = user.Balance + int(price.Token)
+	user.IsUse = true
 
 	user, err = s.userService.Update(user)
 	if err != nil {
