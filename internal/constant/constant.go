@@ -11,4 +11,5 @@ const (
 const (
 	ApartmentServiceName = "apartment"
 	CarServiceName       = "car"
+	General              = "general"
 )

@@ -21,5 +21,5 @@ func (r addonsRouter) HandleRoutes(router *gin.Engine, config *helper.ServiceCon
 	user.POST("add/widget/:service", middlewares.Jwt(config), r.addonsController.AddAddons)
 	user.GET("widget/:service", middlewares.Jwt(config), r.addonsController.GetAddons)
 	user.DELETE("widget/:service", middlewares.Jwt(config), r.addonsController.DeleteWidget)
-	user.GET("config", r.addonsController.GetConfig)
+	user.GET("config/:service", r.addonsController.GetConfig)
 }

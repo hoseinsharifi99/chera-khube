@@ -19,9 +19,9 @@ type configDb struct {
 	logger *zap.Logger
 }
 
-func (r configDb) List() []model.Config {
+func (r configDb) List(serviceName string) []model.Config {
 	var configs []model.Config
-	err := r.db.Find(&configs).Error
+	err := r.db.Where("service_name = ?", serviceName).Find(&configs).Error
 	if err != nil {
 		r.logger.Error("failed to fetch configs", zap.Error(err))
 		return []model.Config{}

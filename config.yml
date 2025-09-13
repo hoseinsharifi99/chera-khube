@@ -63,6 +63,27 @@ divar:
     oauth_phone_number:
       base_url: https://open-api.divar.ir/v1/open-platform/users
 
+  general:
+    client_id: garnet-lake-healer
+    client_secret: 7c79373bca5fee1214cac71cb9f6cddda33d96dbdbbedd53d04ca8b7132330373dd026f4f06fe43a72dc75b2e8ac776db8591125779ded6f3a03ba32c43e13ef
+    api_key: eyJhbGciOiJSUzI1NiIsImtpZCI6InByaXZhdGVfa2V5XzIiLCJ0eXAiOiJKV1QifQ.eyJhcHBfc2x1ZyI6Imdhcm5ldC1sYWtlLWhlYWxlciIsImF1ZCI6InNlcnZpY2Vwcm92aWRlcnMiLCJleHAiOjE3NjI5NDIzMDYsImp0aSI6IjBlNTdjNWQyLTkwOGEtMTFmMC04YzViLTA2NmZlZTExMjI1ZiIsImlhdCI6MTc1Nzc1ODMwNiwiaXNzIjoiZGl2YXIiLCJzdWIiOiJhcGlrZXkifQ.aevOMfRGOr2PucgD8nUD1wID-N6RAGPjCRkiuov3SSQyDuEI2LDhv9TcIn6z2XjujMUBFuxFON_zqcWq1p1Qee3lNPQaXOgd0mP_9L3smVMYlZXkPUbdIrGpGnnDZTRotowc2LW-kl5a65crGnQtHcdXPiG6SaL6QL1IBcwcNuJv7VgOLqKxOXFd77axYkNErGxZo4BRxsTKpSD3bvjEjCqCGTuoi_IXzHnQGCUYdUWjnLLb9KUAP66phQdYPkHmIdwDnNjAE6qkFFVdpB_fzJ23FiaM5nrmDsWTh1XWWYv9nj3YL1onb5LW7EsKGbRFXVUeeugjMKL4C5WT5McrxA
+    redirect_uri: https://api.divarinow.ir/v1/user/oauth/general
+    image: 368c02f2-340b-4602-83a5-efc2b3d2407b.jpg
+    scopes: USER_PHONE POST_ADDON_CREATE.
+
+    oauth:
+      base_url: https://oauth.divar.ir/oauth2/auth?response_type=%s&client_id=%s&redirect_uri=%s&scope=%s&state=%s
+      response_type: code
+
+    oauth_token:
+      base_url: https://oauth.divar.ir/oauth2/token
+      grant_type: authorization_code
+
+    oauth_phone_number:
+      base_url: https://open-api.divar.ir/v1/open-platform/users
+
+
+
 app:
   salt: _E[*.61P.wA;-M>sS>Gb?@ZVd&>zp"C=A=R=p+.=K0d7CQ1R\WX;froI?wY![io`7Hk`<p=:xlK{nA<T[22H,ziR0Nv-BqweuMca+cZ1gR&D<J[6_s<,ko[Yh!aooK~C
   inquiry_cost: 150000

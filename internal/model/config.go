@@ -7,4 +7,5 @@ type Config struct {
 	Code        string `gorm:"type:varchar(255); uniqueIndex" json:"token"`
 	Description string `gorm:"type:varchar(255)" json:"description"`
 	Category    string `gorm:"type:varchar(255)" json:"category"`
+	ServiceName string `gorm:"type:varchar(255)" json:"-"`
 }
