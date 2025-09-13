@@ -1,6 +1,7 @@
 package service
 
 import (
+	"chera_khube/internal/constant"
 	"chera_khube/internal/helper"
 	"chera_khube/internal/model"
 	"chera_khube/internal/repository"
@@ -12,6 +13,7 @@ import (
 )
 
 const description = "چرا این ملک خوبه؟"
+const generalDesc = "چرا این آگهی خوبه؟"
 
 type AddonsService interface {
 	AddWidgetToPost(ctx *gin.Context, serviceName string) (*model.Adons, float64, error)
@@ -151,6 +153,9 @@ func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string, s
 	}
 
 	newDescription := description
+	if serviceName == constant.General {
+		newDescription = generalDesc
+	}
 
 	addons := &model.Adons{
 		PostID:      post.ID,
