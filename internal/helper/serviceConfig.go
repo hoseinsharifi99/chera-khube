@@ -30,6 +30,7 @@ type httpConfig struct {
 type divarConfig struct {
 	Apartment divar    `mapstructure:"apartment"`
 	Car       divar    `mapstructure:"car"`
+	General   divar    `mapstructure:"general"`
 	Api       divarApi `mapstructure:"api"`
 }
 
@@ -126,6 +127,8 @@ func (c *ServiceConfig) GetDivarConfig(service string) divar {
 		config = c.Divar.Apartment
 	case constant.CarServiceName:
 		config = c.Divar.Car
+	case constant.General:
+		config = c.Divar.General
 	}
 
 	return config

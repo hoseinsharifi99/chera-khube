@@ -18,7 +18,7 @@ type AddonsService interface {
 	CreateAddons(ctx *gin.Context, postToken, codes string, serviceName string) (*model.Post, *model.Adons, int, error)
 	AddWidget(postToken, accessToken string, wid map[string]string, addons model.Adons, serviceName string) error
 	DeleteWidget(ctx *gin.Context, serviceName string) error
-	GetConfig() []model.Config
+	GetConfig(serviceName string) []model.Config
 	GetAddons(ctx *gin.Context, serviceName string) (*model.Adons, int, error)
 }
 
@@ -124,8 +124,8 @@ func (s addonsService) AddWidgetToPostAfterCreate(ad *model.Adons, post *model.P
 	return ad, err
 }
 
-func (s addonsService) GetConfig() []model.Config {
-	return s.configRepo.List()
+func (s addonsService) GetConfig(serviceName string) []model.Config {
+	return s.configRepo.List(serviceName)
 }
 
 func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string, serviceName string) (*model.Post, *model.Adons, int, error) {

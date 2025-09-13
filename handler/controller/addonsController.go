@@ -74,7 +74,9 @@ func (a addonsController) AddAddons(ctx *gin.Context) {
 }
 
 func (a addonsController) GetConfig(ctx *gin.Context) {
-	configs := a.addonsService.GetConfig()
+	srv := ctx.Param("service")
+
+	configs := a.addonsService.GetConfig(srv)
 	ctx.JSON(http.StatusOK, gin.H{"status": "ok", "configs": configs})
 }
 
