@@ -50,7 +50,7 @@ func (s oAuthService) LoginWithDivar(ctx *gin.Context, service string) string {
 	if service == constant.ApartmentServiceName {
 		url = fmt.Sprintf(s.Config.Divar.Apartment.OAuth.BaseUrl, s.Config.Divar.Apartment.OAuth.ResponseType, s.Config.Divar.Apartment.ClientID, s.Config.Divar.Apartment.RedirectUrl, s.Config.Divar.Apartment.Scopes+postToken, state)
 	} else {
-		url = fmt.Sprintf(s.Config.Divar.Car.OAuth.BaseUrl, s.Config.Divar.Car.OAuth.ResponseType, s.Config.Divar.Car.ClientID, s.Config.Divar.Car.RedirectUrl, s.Config.Divar.Car.Scopes+postToken, state)
+		url = fmt.Sprintf(s.Config.Divar.General.OAuth.BaseUrl, s.Config.Divar.General.OAuth.ResponseType, s.Config.Divar.General.ClientID, s.Config.Divar.General.RedirectUrl, s.Config.Divar.General.Scopes+postToken, state)
 	}
 
 	return url
