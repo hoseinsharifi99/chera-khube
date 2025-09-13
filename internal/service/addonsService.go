@@ -74,7 +74,7 @@ func (s addonsService) AddWidgetToPost(ctx *gin.Context, serviceName string) (*m
 	}
 	keys := strings.Split(*ad.Codes, ",")
 
-	AConf := s.configRepo.ListAsMap()
+	AConf := s.configRepo.ListAsMap(serviceName)
 	ConfMap := make(map[string]string)
 	for _, c := range keys {
 		ConfMap[c] = AConf[c]
@@ -102,7 +102,7 @@ func (s addonsService) AddWidgetToPostAfterCreate(ad *model.Adons, post *model.P
 	}
 	keys := strings.Split(*ad.Codes, ",")
 
-	AConf := s.configRepo.ListAsMap()
+	AConf := s.configRepo.ListAsMap(serviceName)
 	ConfMap := make(map[string]string)
 	for _, c := range keys {
 		ConfMap[c] = AConf[c]
@@ -143,7 +143,7 @@ func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string, s
 		return nil, nil, 0, err
 	}
 
-	addonsInfo := s.configRepo.GetByCodes(strings.Split(codes, ","))
+	addonsInfo := s.configRepo.GetByCodes(strings.Split(codes, ","), serviceName)
 	addonsDesc := ""
 	for _, a := range addonsInfo {
 		addonsDesc += a.Description
