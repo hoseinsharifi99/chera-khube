@@ -69,7 +69,7 @@ func (s postService) Get(user *model.User, serviceName string) (*model.Post, *mo
 		return post, nil, user.Balance, nil
 	}
 
-	adons, err := s.addonsDbRepo.Get(post.ID)
+	adons, err := s.addonsDbRepo.Get(post.ID, serviceName)
 	if err != nil {
 		return nil, nil, 0, err
 	}

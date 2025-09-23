@@ -32,9 +32,9 @@ func (r adonsDb) Update(adons *model.Adons) error {
 	return err
 }
 
-func (r adonsDb) Get(postID uint) (*model.Adons, error) {
+func (r adonsDb) Get(postID uint, serviceName string) (*model.Adons, error) {
 	var adons model.Adons
-	err := r.db.Where("post_id = ?", postID).First(&adons).Error
+	err := r.db.Where("post_id = ? AND service = ?", postID, serviceName).First(&adons).Error
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

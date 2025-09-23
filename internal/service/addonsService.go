@@ -162,6 +162,7 @@ func (s addonsService) CreateAddons(ctx *gin.Context, postToken, codes string, s
 		IsConnected: false,
 		Description: newDescription,
 		Codes:       &codes,
+		Service:     serviceName,
 	}
 
 	_, err = s.addonDbRepo.Insert(addons)
