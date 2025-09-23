@@ -22,7 +22,7 @@ type pricingDB struct {
 func (p pricingDB) ListWithFirstDiscount(serviceID uint) ([]*model.PricingLogic, error) {
 	var pricing []*model.PricingLogic
 
-	err := p.db.Where("id != ? AND service_id = ?", 1, serviceID).Order("price ASC").Find(&pricing).Error
+	err := p.db.Where("id != ? AND id != ? AND service_id = ?", 1, 5, serviceID).Order("price ASC").Find(&pricing).Error
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (p pricingDB) ListWithFirstDiscount(serviceID uint) ([]*model.PricingLogic,
 func (p pricingDB) ListWithOutFirstDiscount(serviceID uint) ([]*model.PricingLogic, error) {
 	var pricing []*model.PricingLogic
 
-	err := p.db.Where("id != ? AND service_id = ?", 4, serviceID).Order("price ASC").Find(&pricing).Error
+	err := p.db.Where("id != ? AND id != ? AND service_id = ?", 4, 6, serviceID).Order("price ASC").Find(&pricing).Error
 	if err != nil {
 		return nil, err
 	}
