@@ -45,3 +45,14 @@ func (r adonsDb) Get(postID uint, serviceName string) (*model.Adons, error) {
 
 	return &adons, nil
 }
+
+func (r adonsDb) DeleteByID(id uint) error {
+	err := r.db.Delete(&model.Adons{}, id).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil // nothing to delete
+		}
+		return err
+	}
+	return nil
+}

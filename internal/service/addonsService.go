@@ -209,7 +209,7 @@ func (s addonsService) DeleteWidget(ctx *gin.Context, serviceName string) error 
 	}
 
 	ad.IsConnected = false
-	err = s.addonDbRepo.Update(ad)
+	err = s.addonDbRepo.DeleteByID(ad.ID)
 	if err != nil {
 		return err
 	}
